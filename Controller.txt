@@ -1,0 +1,88 @@
+コントローラー
+
+①ログイン画面 login.jsp　　　　　　
+LoginServlet.java      
+login.jsp ログイン画面を表示
+ログイン処理を行うサーブレット
+
+データベースの会員IDとパスワードが一致すればMenuServlet.javaを実行
+一致しなければ同じ画面のままリダイレクト
+
+
+LogoutServlet.java
+ログアウト画面を表示
+ログアウト画面を表示サーブレット
+セッションを切ってLoginServlet.javaを実行
+ログイン画面を表示
+
+
+
+②登録画面 register.jsp		    
+RegisterServlet.java
+register.jsp 登録画面を表示するサーブレット
+
+データベースにアカウント情報を保存
+
+
+
+③メニュー画面 menu.jsp             
+MenuServlet.java
+メニュー画面を表示
+メニュー画面 menu.jsp を表示するサーブレット
+
+商品検索機能
+商品名でデータベースに問い合わせる。ヒットした情報をshohin.jspに渡す。
+
+
+
+④商品検索後画面  shohin.jsp        
+ShohinServlet.java
+商品検索後画面を表示
+商品検索後画面 shohin.jspを表示
+メニュー画面でヒットした情報も表示
+
+
+⑤商品詳細画面 shohin_detail.jsp    
+ShohinDetailServlet.java
+商品詳細画面を表示
+
+商品詳細画面 shohin_detail.jspを表示
+
+
+
+
+⑥カート内画面  cart.jsp              
+CartServlet.java
+カート内画面を表示
+
+
+
+⑦注文者情報  order.jsp
+OrderServlet.java
+注文者情報を表示
+
+
+
+⑧購入内容確認画面 care.jsp
+CareServlet.java
+購入内容確認画面を表示
+
+
+⑨注文完了画面 order_comp.jsp
+OrderCompServlet.java
+注文画面を表示
+
+
+⑩注文履歴画面  history.jsp
+HistoryServlet.java
+注文履歴画面を表示
+
+
+⑪管理者画面  admin.jsp 
+AdminServlet.java
+管理者画面を表示
+
+管理者画面  admin.jsp を表示
+
+商品を登録する
+
