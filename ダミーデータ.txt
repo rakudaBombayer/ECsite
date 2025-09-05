@@ -1,0 +1,28 @@
+INSERT INTO account (
+  password, shimei, yuubin_bangou, address, denwa_bangou,
+  seinengappi, mail_address, shiharai_houhou, is_admin
+) VALUES
+('hashed_pw_123', '山田 太郎', '920-0853', '石川県金沢市本町1-1-1', '076-123-4567', '1990-04-15', 'taro.yamada@example.com', 'クレカ', FALSE),
+('hashed_pw_456', '佐藤 花子', '100-0001', '東京都千代田区千代田1-1', '03-9876-5432', '1985-12-03', 'hanako.sato@example.com', '代引き', FALSE),
+('hashed_pw_admin', '管理者 一郎', '530-0001', '大阪府大阪市北区梅田1-1-1', '06-1111-2222', '1975-07-07', 'admin@example.com', 'クレカ', TRUE);
+
+
+INSERT INTO order_customer (
+  kaiin_id, shimei, yuubin_bangou, address, denwa_bangou,
+  mail_address, kounyubi, shiharai_houhou
+) VALUES
+(1, '山田 太郎', '920-0853', '石川県金沢市本町1-1-1', '076-123-4567', 'taro.yamada@example.com', CURRENT_TIMESTAMP, 'クレカ'),
+(2, '佐藤 花子', '100-0001', '東京都千代田区千代田1-1', '03-9876-5432', 'hanako.sato@example.com', CURRENT_TIMESTAMP, '代引き');
+
+
+
+INSERT INTO shohin (
+  shouhin_mei, shouhin_setsumei, kakaku, kounyuu_suuryou,
+  zaiko_suuryou, shouhin_gazou
+) VALUES
+('金沢カレー', '濃厚ルーとキャベツが特徴のご当地カレー', 850, 2, 50, 'kanazawa_curry.jpg'),
+('加賀友禅ハンカチ', '伝統工芸をモチーフにした美しいハンカチ', 1200, 1, 30, 'kaga_yuzen.jpg'),
+('九谷焼マグカップ', '石川県の伝統陶芸、九谷焼のマグカップ', 2500, 1, 20, 'kutani_mug.jpg');
+
+
+

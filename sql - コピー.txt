@@ -1,0 +1,45 @@
+psql -U postgres
+ユーザ postgres のパスワード:sql
+
+\c shop_site(データベース作成後、shop_siteに接続)
+
+
+CREATE DATABASE shop_site;
+
+
+CREATE TABLE account (
+    kaiin_id SERIAL PRIMARY KEY,
+    password VARCHAR(255) NOT NULL,
+    shimei VARCHAR(100) NOT NULL,
+    yuubin_bangou VARCHAR(10) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    denwa_bangou VARCHAR(20) NOT NULL,
+    seinengappi DATE NOT NULL,
+    mail_address VARCHAR(255) NOT NULL,
+    shiharai_houhou VARCHAR(50) NOT NULL,
+    is_admin BOOLEAN DEFAULT FALSE
+);
+
+
+CREATE TABLE order_customer (
+    order_id SERIAL PRIMARY KEY,
+    kaiin_id INT REFERENCES account(kaiin_id),
+    shimei VARCHAR(100) NOT NULL,
+    yuubin_bangou VARCHAR(10) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    denwa_bangou VARCHAR(20) NOT NULL,
+    mail_address VARCHAR(255) NOT NULL,
+    kounyubi TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    shiharai_houhou VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE shohin (
+    shohin_id SERIAL PRIMARY KEY,
+    shouhin_mei VARCHAR(100) NOT NULL,
+    shouhin_setsumei TEXT NOT NULL,
+    kakaku INT NOT NULL,
+    kounyuu_suuryou INT NOT NULL,
+    zaiko_suuryou INT NOT NULL,
+    shouhin_gazou VARCHAR(255)
+);

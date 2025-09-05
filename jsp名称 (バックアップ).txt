@@ -1,0 +1,23 @@
+①ログイン画面 login.jsp
+
+②登録画面 register.jsp
+
+③メニュー画面 menu.jsp
+
+④商品検索後画面  shohin.jsp
+
+⑤商品詳細画面 shohin_detail.jsp
+
+⑥カート画面  cart.jsp
+
+⑦注文者情報  order.jsp
+
+⑧購入内容確認画面 care.jsp
+
+⑨注文完了画面 order_comp.jsp
+
+⑩注文履歴画面  history.jsp
+
+⑪管理者画面  admin.jsp 
+
+ 

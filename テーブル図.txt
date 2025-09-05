@@ -1,0 +1,52 @@
+データベース名 shop_site
+
+
+
+accountテーブル(会員情報)
++--------------------+----------------+-------------------------------+----------------------------------+
+| カラム名           | データ型       | 制約                         | 説明                             |
++--------------------+----------------+-------------------------------+----------------------------------+
+| kaiin_id           | INT            |SERIAL , PRIMARY KEY           | 会員ID（自動連番）               |
+| password           | VARCHAR(255)   | NOT NULL                      | パスワード（ハッシュ推奨）       |
+| shimei             | VARCHAR(100)   | NOT NULL                      | 氏名                             |
+| yuubin_bangou      | VARCHAR(10)    | NOT NULL                      | 郵便番号                         |
+| address            | VARCHAR(255)   | NOT NULL                      | 住所                             |
+| denwa_bangou       | VARCHAR(20)    | NOT NULL                      | 電話番号                         |
+| seinengappi        | DATE           | NOT NULL                      | 生年月日                         |
+| mail_address       | VARCHAR(255)   | NOT NULL                      | メールアドレス                   |
+| shiharai_houhou    | VARCHAR(50)    | NOT NULL                      | 支払方法（例：クレカ、代引き）  |
+| is_admin           | BOOLEAN        | DEFAULT FALSE                 | 管理者権限（TRUEなら管理者）     |
++--------------------+----------------+-------------------------------+----------------------------------+
+
+
+order_customerテーブル(注文者情報)
+
++--------------------+----------------+-------------------------------+----------------------------------+
+| カラム名           | データ型       | 制約                         | 説明                              |
++--------------------+----------------+-------------------------------+----------------------------------+
+|order_id            | INT            | SERIAL , PRIMARY KEY          | 注文番号ID（自動連番）           |
+| kaiin_id           | INT            | FOREIGN KEY　　　　　　　　   | 会員ID（自動連番）               |
+| shimei             | VARCHAR(100)   | NOT NULL                      | 氏名                             |
+| yuubin_bangou      | VARCHAR(10)    | NOT NULL                      | 郵便番号                         |
+| address            | VARCHAR(255)   | NOT NULL                      | 住所                             |
+| denwa_bangou       | VARCHAR(20)    | NOT NULL                      | 電話番号                         |
+| mail_address       | VARCHAR(255)   | NOT NULL                      | メールアドレス                   |
+|kounyubi	     | TIMESTAMP      |CURRENT TIME		      | 購入日を現在時刻で自動で決める   |
+| shiharai_houhou    | VARCHAR(50)    | NOT NULL                      | 支払方法（例：クレカ、代引き）   |
++--------------------+----------------+-------------------------------+----------------------------------+
+
+
+shohinテーブル(商品情報)
++-------------------+----------------+----------------+------------------------+
+| カラム名          | データ型       | 制約           | 説明                   |
++-------------------+----------------+----------------+------------------------+
+|shohin_id          | INT            | PRIMARY KEY  SERIAL|id                  |
+| shouhin_mei       | VARCHAR(100)   | NOT NULL       | 商品名                 |
+| shouhin_setsumei  | TEXT           | NOT NULL       | 商品説明               |
+| kakaku            | INT            | NOT NULL       | 価格（単価）           |
+| kounyuu_suuryou   | INT            | NOT NULL       | 購入数量等             |
+| zaiko_suuryou     | INT            | NOT NULL       | 在庫数量               |
+| shouhin_gazou     | VARCHAR(255)   |                | 商品画像のファイル名やURL |
++-------------------+----------------+----------------+------------------------+
+
+
