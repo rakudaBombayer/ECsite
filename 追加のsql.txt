@@ -1,0 +1,62 @@
+
+shohin_idで検索するか、
+|shouhin_mei       | VARCHAR(100)   | NOT NULL       | 商品名                  |
+| shouhin_setsumei  | TEXT           | NOT NULL       | 商品説明               |
+| kakaku            | INT            | NOT NULL       | 価格（単価）           |
+| kounyuu_suuryou   | INT            | NOT NULL       | 購入数量等             |
+|shouhin_gazou     | VARCHAR(255)   |                | 商品画像のファイル名やURL |
+のテーブルを作ってもういれてしまうか
+
+shopping_cartテーブル（カート内）
+
+
+
+CREATE TABLE shopping_cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    kaiin_id INT NOT NULL,
+    shohin_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (kaiin_id) REFERENCES account(kaiin_id),
+    FOREIGN KEY (shohin_id) REFERENCES shohin(shohin_id)
+);
+
+
++-------------+----------------+----------------------------------------+----------------------------------+
+| カラム名    | データ型       | 制約                                   | 説明                             |
++-------------+----------------+----------------------------------------+----------------------------------+
+| id          | INT            | AUTO_INCREMENT, PRIMARY KEY            | カートアイテムID（自動採番）     |
+| kaiin_id    | INT            | NOT NULL, FOREIGN KEY → account(kaiin_id) | 会員ID（会員テーブルと紐付け）   |
+| shohin_id   | INT            | NOT NULL, FOREIGN KEY → shohin(shohin_id) | 商品ID（商品テーブルと紐付け）   |
+| quantity    | INT            | NOT NULL, DEFAULT 1                    | 購入予定の数量                   |
+| added_at    | DATETIME       | DEFAULT CURRENT_TIMESTAMP              | カートに追加した日時             |
++-------------+----------------+----------------------------------------+----------------------------------+
+
+
+orderHisotoryテーブル(注文履歴)
+
+
+
+CREATE TABLE order_history (
+    history_id INT AUTO_INCREMENT PRIMARY KEY,
+    kaiin_id INT NOT NULL,
+    shohin_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (kaiin_id) REFERENCES account(kaiin_id),
+    FOREIGN KEY (shohin_id) REFERENCES shohin(shohin_id)
+);
+
+
+
++--------------+----------------+----------------------------------------+----------------------------------+
+| カラム名     | データ型       | 制約                                   | 説明                             |
++--------------+----------------+----------------------------------------+----------------------------------+
+| history_id   | INT            | AUTO_INCREMENT, PRIMARY KEY            | 注文履歴ID（自動採番）           |
+| kaiin_id     | INT            | NOT NULL, FOREIGN KEY → account(kaiin_id) | 会員ID（購入者）              |
+| shohin_id    | INT            | NOT NULL, FOREIGN KEY → shohin(shohin_id) | 商品ID（購入商品）            |
+| quantity     | INT            | NOT NULL, DEFAULT 1                    | 購入数量                         |
+| order_date   | DATETIME       | DEFAULT CURRENT_TIMESTAMP              | 注文日時                         |
++--------------+----------------+----------------------------------------+----------------------------------+
