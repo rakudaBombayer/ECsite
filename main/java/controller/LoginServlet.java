@@ -53,6 +53,7 @@ protected void doPost(HttpServletRequest request,
 	        session.setAttribute("userId", userId); // ログイン状態を保持
 
 	        System.out.println("ログイン成功: " + userId);
+	        
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/menu.jsp");
 	        dispatcher.forward(request, response);
 	    } else {

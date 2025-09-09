@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +22,12 @@
             <a href="MenuServlet" class="register-button">ログイン(仮)メニュー画面へ</a>
             <a href="RegisterServlet" class="register-button">会員登録(仮)へ</a>
         </form>
+        <c:if test="${not empty successMessage}">
+    		<p style="color: blue;">${successMessage}</p>
+		</c:if>
+		<c:if test="${not empty errorMessage}">
+    		<p style="color: red;">${errorMessage}</p>
+		</c:if>
     </div>
 </body>
 </html>
