@@ -25,13 +25,18 @@ register.jsp 登録画面を表示するサーブレット
 
 
 
+
 ③メニュー画面 menu.jsp             
 MenuServlet.java
 メニュー画面を表示
 メニュー画面 menu.jsp を表示するサーブレット
 
-商品検索機能
+shohinテーブルにある個数が0個以上のデータをすべて表示。
+
+
+商品検索機能(ShohinServlet.java)
 商品名でデータベースに問い合わせる。ヒットした情報をshohin.jspに渡す。
+
 
 
 
@@ -39,7 +44,10 @@ MenuServlet.java
 ShohinServlet.java
 商品検索後画面を表示
 商品検索後画面 shohin.jspを表示
-メニュー画面でヒットした情報も表示
+メニュー画面で商品名でヒットした情報を表示
+
+
+
 
 
 ⑤商品詳細画面 shohin_detail.jsp    
@@ -48,18 +56,39 @@ ShohinDetailServlet.java
 
 商品詳細画面 shohin_detail.jspを表示
 
+商品idで検索して、
+shohinテーブルの情報を出す。
+
+カートに入れるボタンを表示
+
+・カートに入れるボタンを押下すると商品idと個数とログインしているkaiin_idをshopping_cartテーブルに保存。
 
 
 
 ⑥カート内画面  cart.jsp              
 CartServlet.java
 カート内画面を表示
+カートに入れた商品を一覧表示
 
+
+・カートの購入ボタンを押すと注文者情報にページが遷移
+・カートの購入ボタンを押すとorder_customerテーブルのkounyubiにCURRENT TIMEが自動で入る
+
+
+shopping_cartテーブルをidで
 
 
 ⑦注文者情報  order.jsp
 OrderServlet.java
 注文者情報を表示
+
+accountテーブルから
+（氏名、郵便番号、住所、
+・電話番号、メールアドレス、支払方法）を持ってきて初期表示し<input>タグで表示し編集できる状態
+
+
+・上のデータを保持するがテーブルには保存せずデータを持って、次のページへ(保存は購入内容確定画面で「確定」を押すと
+order_customerテーブルに保存)
 
 
 
@@ -68,14 +97,32 @@ CareServlet.java
 購入内容確認画面を表示
 
 
+
+・「確定」を押下後、注文完了に遷移する。
+・「確定」を押下後、注文内容を注文履歴に登録する。(orderHisotoryテーブルに保存)
+・「確定」を押下後、注文内容をメールで送信する。
+・「確定」を押下後、ショッピングカートの内容をクリアし、各商品の在庫数量を減らす。
+
+
+
 ⑨注文完了画面 order_comp.jsp
 OrderCompServlet.java
 注文画面を表示
+
+・注文が正常に完了したことを表示する。
+・メニュー画面への遷移ボタン
+
+
 
 
 ⑩注文履歴画面  history.jsp
 HistoryServlet.java
 注文履歴画面を表示
+
+・過去の注文内容（購入日、購入時の注文者情報の入力内容、購入した商品の情報）を表示する。
+・ログインユーザーのkaiin_idで検索をかけてorderHisotoryテーブルの商品情報を持ってくる。
+
+
 
 
 ⑪管理者画面  admin.jsp 
@@ -84,5 +131,12 @@ AdminServlet.java
 
 管理者画面  admin.jsp を表示
 
-商品を登録する
+・商品を登録する機能(shohinテーブルにデータをインサートする)
+
+|shouhin_mei        | VARCHAR(100)   | NOT NULL       | 商品名                 |
+| shouhin_setsumei  | TEXT           | NOT NULL       | 商品説明               |
+| kakaku            | INT            | NOT NULL       | 価格（単価）           |
+| kounyuu_suuryou   | INT            | NOT NULL       | 購入数量等             |
+| zaiko_suuryou     | INT            | NOT NULL       | 在庫数量               |
+| shouhin_gazou     | VARCHAR(255)   |                | 商品画像のファイル名やURL 
 
