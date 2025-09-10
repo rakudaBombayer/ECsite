@@ -21,12 +21,12 @@ protected void doGet(HttpServletRequest request,
 		HttpServletResponse response)
 		throws ServletException, IOException {
 		
-	 // DAOインスタンスを作成
-    ECsiteDAO dao = new ECsiteDAO();
+	 	// DAOインスタンスを作成
+    	ECsiteDAO dao = new ECsiteDAO();
 
-    // 接続確認
-    boolean connected = dao.isConnected();
-    System.out.println("DB接続状態: " + connected);
+    	// 接続確認
+    	boolean connected = dao.isConnected();
+    	System.out.println("DB接続状態: " + connected);
 	
 	
 	
@@ -54,8 +54,9 @@ protected void doPost(HttpServletRequest request,
 
 	        System.out.println("ログイン成功: " + userId);
 	        
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/menu.jsp");
-	        dispatcher.forward(request, response);
+	        response.sendRedirect("MenuServlet");
+//	        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/menu.jsp");
+//	        dispatcher.forward(request, response);
 	    } else {
 	        // 認証失敗 → ログイン画面に戻す
 	        System.out.println("ログイン失敗: " + userId);

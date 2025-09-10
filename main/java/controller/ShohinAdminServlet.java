@@ -72,11 +72,19 @@ public class ShohinAdminServlet extends HttpServlet {
         }
 
         // 成功したら admin.jsp にリダイレクト
+//        if (result) {
+//            response.sendRedirect("AdminServlet");
+//        } else {
+//            request.setAttribute("error", "操作に失敗しました。");
+//            request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+//        }
         if (result) {
-            response.sendRedirect("AdminServlet");
+            request.setAttribute("success", "商品を登録しました！");
+            request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
         } else {
-            request.setAttribute("error", "操作に失敗しました。");
+            request.setAttribute("error", "商品登録に失敗しました。");
             request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
         }
+
     }
 }

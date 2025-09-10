@@ -34,6 +34,18 @@
             margin-top: 15px;
             padding: 8px 20px;
         }
+        .message.success {
+    	color: green;
+    	font-weight: bold;
+    	margin-bottom: 10px;
+		}
+
+		.message.error {
+    	color: red;
+    	font-weight: bold;
+    	margin-bottom: 10px;
+		}
+        
     </style>
 </head>
 <body>
@@ -62,7 +74,14 @@
 
         <input type="submit" value="商品を追加">
     </form>
+	<c:if test="${not empty success}">
+    	<div class="message success">${success}</div>
+	</c:if>
 
+	<c:if test="${not empty error}">
+    	<div class="message error">${error}</div>
+	</c:if>
+	
     <!-- ② 商品変更 -->
     <form action="ShohinAdminServlet" method="post">
         <h2>② 商品を変更</h2>
