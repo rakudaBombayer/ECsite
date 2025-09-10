@@ -1,43 +1,73 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>商品詳細画面</title>
+    <meta charset="UTF-8">
+    <title>商品詳細画面</title>
+    <style>
+        .product-detail {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            font-family: sans-serif;
+        }
 
+        .product-image {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .back-links {
+            margin-top: 20px;
+        }
+
+        .shouhin_gazou {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .register-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .register-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
-<h1>商品詳細画面</h1>
 <body>
 
-<a href="CartServlet" class="register-button">ショッピングカート画面へ(仮)</a>
-<div><a href="MenuServlet">メニューへ</a></div>
+    <h1>商品詳細画面</h1>
+
+    <div class="product-detail">
+        <c:choose>
+            <c:when test="${not empty shohin}">
+                <h2>${shohin.shouhinMei}</h2>
+                <img src="${shohin.shouhinGazou}" alt="商品画像" class="shouhin_gazou"><br><br>
+                <strong>価格:</strong> <fmt:formatNumber value="${shohin.kakaku}" type="number" /> 円<br>
+                <strong>在庫数:</strong> ${shohin.zaikoSuuryou} 個<br><br>
+                <strong>商品説明:</strong><br>
+                <p>${shohin.shouhinSetsumei}</p>
+            </c:when>
+            <c:otherwise>
+                <p>商品情報が取得できませんでした。</p>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
+    <div class="back-links">
+        <a href="CartServlet" class="register-button">ショッピングカート画面へ</a>
+        <a href="MenuServlet" class="register-button">メニューへ</a>
+    </div>
+
 </body>
 </html>
-<style>
-    /* フォーム全体を左上に配置 */
-    .search-container {
-        text-align: left;
-        padding: 20px;
-    }
-
-    /* 検索フォームとカテゴリ選択を横並びにする */
-    .search-form {
-        display: flex;
-        align-items: center;
-        gap: 10px; /* 要素の間隔 */
-    }
-
-    input[type="text"] {
-        width: 250px;
-        padding: 5px;
-    }
-
-    select {
-        padding: 5px;
-    }
-
-    input[type="submit"] {
-        padding: 5px 15px;
-    }
-</style>

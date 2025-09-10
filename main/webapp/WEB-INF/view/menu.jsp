@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,12 +36,16 @@
     </form>
     <div><a href="ShohinServlet">商品検索後の画面へ</a></div>
 </div>
-<div><a href="ShohinDetailServlet">商品1のフィギュア</a></div>
-<div><a href="ShohinDetailServlet">商品2のフィギュア</a></div>
-<div><a href="ShohinDetailServlet">商品3のフィギュア</a></div>
-<div><a href="ShohinDetailServlet">商品4のフィギュア</a></div>
-<div><a href="ShohinDetailServlet">商品5のフィギュア</a></div>
-<div><a href="ShohinDetailServlet">商品6のフィギュア</a></div>
+    <c:forEach var="item" items="${shohinList}">
+    <div class="item-box">
+        <a href="ShohinDetailServlet?shohin_id=${item.shohinId}">
+            ${item.shouhinMei}${item.shohinId}
+        </a>
+        <p>${item.shouhinSetsumei}</p>
+        <p>価格：${item.kakaku}円</p>
+        <img src="images/${item.shouhinGazou}" alt="${item.shouhinMei}" width="150">
+    </div>
+	</c:forEach>
 
 </body>
 </html>
@@ -70,4 +76,13 @@
     input[type="submit"] {
         padding: 5px 15px;
     }
+    .item-box {
+    	border: 1px solid #ccc;         /* 枠線の色と太さ */
+    	padding: 16px;                  /* 内側の余白 */
+    	margin-bottom: 20px;            /* 下の余白 */
+    	border-radius: 8px;             /* 角を丸く */
+    	background-color: #f9f9f9;      /* 背景色（任意） */
+    	box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* ほんのり影（任意） */
+}
+    
 </style>

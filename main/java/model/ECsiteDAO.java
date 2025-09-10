@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ECsiteDAO {
 
@@ -88,6 +90,123 @@ public class ECsiteDAO {
     		e.printStackTrace();
     		return false;
     	}
+    	
+    }
+ // 商品IDから商品を1件取得するメソッド
+    public Shohin getProductById(int id) {
+        String sql = "SELECT * FROM shohin WHERE shohin_id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                Shohin shohin = new Shohin();
+                shohin.setShohinId(rs.getInt("shohin_id"));
+                shohin.setShouhinMei(rs.getString("shouhin_mei"));
+                shohin.setShouhinSetsumei(rs.getString("shouhin_setsumei"));
+                shohin.setKakaku(rs.getInt("kakaku"));
+                shohin.setZaikoSuuryou(rs.getInt("zaiko_suuryou"));
+                shohin.setShouhinGazou(rs.getString("shouhin_gazou"));
+                return shohin;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // 取得できなかった場合
+    }
+ // 商品追加
+    public boolean insertShohin(String name, String desc, int price, int stock,  String image) {
+    	String sql = "INSERT INTO shohin (shouhin_mei, shouhin_setsumei, kakaku, zaiko_suuryou,  shouhin_gazou) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        	System.out.println("DB接続成功");
+            System.out.println("name: " + name);
+            System.out.println("desc: " + desc);
+            System.out.println("price: " + price);
+            System.out.println("stock: " + stock);
+            System.out.println("image: " + image);
+        	
+        	
+        	
+            stmt.setString(1, name);
+            stmt.setString(2, desc);
+            stmt.setInt(3, price);
+            stmt.setInt(4, stock);
+            stmt.setString(5, image);
+            
+            //お試し
+            int rows = stmt.executeUpdate();
+            System.out.println("追加された行数: " + rows);
+
+            return rows > 0;
+        } catch (SQLException e) {
+        	System.out.println("SQL例外発生");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 商品更新
+    public boolean updateShohin(Shohin shohin) {
+        String sql = "UPDATE shohin SET shouhin_mei = ?, shouhin_setsumei = ?, kakaku = ?, zaiko_suuryou = ?, shouhin_gazou = ? WHERE shohin_id = ?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, shohin.getShouhinMei());
+            stmt.setString(2, shohin.getShouhinSetsumei());
+            stmt.setInt(3, shohin.getKakaku());
+            stmt.setInt(4, shohin.getZaikoSuuryou());
+            stmt.setString(5, shohin.getShouhinGazou());
+            stmt.setInt(6, shohin.getShohinId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 商品削除
+    public boolean deleteShohin(int shohinId) {
+        String sql = "DELETE FROM shohin WHERE shohin_id = ?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shohinId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    //商品の全件取得(メニュー画面用)
+    public List<Shohin> getAllShohin() {
+        List<Shohin> list = new ArrayList<>();
+        String sql = "SELECT * FROM shohin";
+        
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Shohin shohin = new Shohin();
+                shohin.setShohinId(rs.getInt("shohin_id"));
+                shohin.setShouhinMei(rs.getString("shouhin_mei"));
+                shohin.setShouhinSetsumei(rs.getString("shouhin_setsumei"));
+                shohin.setKakaku(rs.getInt("kakaku"));
+                shohin.setZaikoSuuryou(rs.getInt("zaiko_suuryou"));
+                shohin.setShouhinGazou(rs.getString("shouhin_gazou"));
+                list.add(shohin);
+                
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }
