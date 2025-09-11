@@ -52,7 +52,9 @@
 
     <h1>管理者メニュー</h1>
 
-    <!-- ① 商品追加 -->
+    <!-- ① 商品追加 --><!-- 左側：商品登録フォーム -->
+<div style="display: flex; gap: 40px; align-items: flex-start;">
+    <div style="flex: 1;">
     <form action="ShohinAdminServlet" method="post" enctype="multipart/form-data">
         <h2>① 商品を新規追加</h2>
         <input type="hidden" name="action" value="add">
@@ -74,21 +76,49 @@
 
         <input type="submit" value="商品を追加">
     </form>
-	<c:if test="${not empty success}">
-    	<div class="message success">${success}</div>
-	</c:if>
+    </div>
+    
+    <!-- 右側：登録された商品情報 -->
+    <div style="flex: 1;">
+    	<c:if test="${not empty success}">
+    		<div class="message success">${success}</div>
+		</c:if>
 
-	<c:if test="${not empty error}">
-    	<div class="message error">${error}</div>
-	</c:if>
+		<c:if test="${not empty error}">
+    		<div class="message error">${error}</div>
+		</c:if>
+    <c:if test="${not empty success}">
+        <c:if test="${not empty registeredShohin}">
+            <div class="registered-product">
+                <h3>(登録・変更)された商品情報</h3>
+                <p><strong>商品名：</strong> ${registeredShohin.shouhinMei}</p>
+                <p><strong>商品説明：</strong> ${registeredShohin.shouhinSetsumei}</p>
+                <p><strong>価格：</strong> ¥${registeredShohin.kakaku}</p>
+                <p><strong>在庫数量：</strong> ${registeredShohin.zaikoSuuryou} 個</p>
+
+                <c:if test="${not empty registeredShohin.shouhinGazou}">
+                    <p><strong>商品画像：</strong><br>
+                        <img src="images/${registeredShohin.shouhinGazou}" alt="商品画像" width="200">
+                    </p>
+                </c:if>
+            </div>
+        </c:if>
+    </c:if>
+</div>
+
+
+</div>  
+    
+    
+
 	
     <!-- ② 商品変更 -->
-    <form action="ShohinAdminServlet" method="post">
+    <form action="ShohinAdminServlet" method="post" enctype="multipart/form-data">
         <h2>② 商品を変更</h2>
         <input type="hidden" name="action" value="edit">
 
-        <label>商品ID（変更対象）</label>
-        <input type="text" name="shohinId" required>
+        <label>変更したい商品名</label>
+        <input type="text" name="oldShouhinMei" required>
 
         <label>新しい商品名</label>
         <input type="text" name="shouhinMei">
@@ -113,8 +143,8 @@
         <h2>③ 商品を削除</h2>
         <input type="hidden" name="action" value="delete">
 
-        <label>削除する商品ID</label>
-        <input type="text" name="shohinId" required>
+        <label>削除する商品名</label>
+        <input type="text" name="oldShouhinMei" required>
 
         <input type="submit" value="商品を削除">
     </form>

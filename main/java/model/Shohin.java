@@ -8,6 +8,7 @@ public class Shohin {
     private int kounyuuSuuryou;
     private int zaikoSuuryou;
     private String shouhinGazou;
+    private String oldShouhinMei;
 
     // ゲッターとセッター
     public int getShohinId() { return shohinId; }
@@ -30,4 +31,8 @@ public class Shohin {
 
     public String getShouhinGazou() { return shouhinGazou; }
     public void setShouhinGazou(String shouhinGazou) { this.shouhinGazou = shouhinGazou; }
+    
+    public String getOldShouhinMei() { return oldShouhinMei; }
+    public void setOldShouhinMei(String oldShouhinMei) { this.oldShouhinMei = oldShouhinMei; }
+
 }

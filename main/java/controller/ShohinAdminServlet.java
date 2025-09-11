@@ -42,29 +42,50 @@ public class ShohinAdminServlet extends HttpServlet {
                 break;
 
             case "edit":
-                int editId = Integer.parseInt(request.getParameter("shohinId"));
-                String newName = request.getParameter("shouhinMei");
-                String newDesc = request.getParameter("shouhinSetsumei");
-                String newPriceStr = request.getParameter("kakaku");
-                String newStockStr = request.getParameter("zaikoSuuryou");
-                String newImage = request.getParameter("shouhinGazou");
+            	String oldMei = request.getParameter("oldShouhinMei");
+            	String newMei = request.getParameter("shouhinMei");
+            	String newDesc = request.getParameter("shouhinSetsumei");
+            	String newPriceStr = request.getParameter("kakaku");
+            	String newStockStr = request.getParameter("zaikoSuuryou");
+            	String newImage = request.getParameter("shouhinGazou");
+
+            	Shohin shohin = new Shohin();
+            	shohin.setShouhinMei(newMei);
+            	shohin.setShouhinSetsumei(newDesc);
+            	shohin.setKakaku(Integer.parseInt(newPriceStr));
+            	shohin.setZaikoSuuryou(Integer.parseInt(newStockStr));
+            	shohin.setShouhinGazou(newImage);
+
+            	result = dao.updateShohin(shohin, oldMei);
 
                 // 空チェックして必要に応じて更新
-                Shohin updated = dao.getProductById(editId);
-                if (updated != null) {
-                    if (newName != null && !newName.isEmpty()) updated.setShouhinMei(newName);
-                    if (newDesc != null && !newDesc.isEmpty()) updated.setShouhinSetsumei(newDesc);
-                    if (newPriceStr != null && !newPriceStr.isEmpty()) updated.setKakaku(Integer.parseInt(newPriceStr));
-                    if (newStockStr != null && !newStockStr.isEmpty()) updated.setZaikoSuuryou(Integer.parseInt(newStockStr));
-                    if (newImage != null && !newImage.isEmpty()) updated.setShouhinGazou(newImage);
-
-                    result = dao.updateShohin(updated);
-                }
+//                Shohin updated = dao.getProductById(editId);
+//                if (updated != null) {
+//                    if (newName != null && !newName.isEmpty()) updated.setShouhinMei(newName);
+//                    if (newDesc != null && !newDesc.isEmpty()) updated.setShouhinSetsumei(newDesc);
+//                    if (newPriceStr != null && !newPriceStr.isEmpty()) updated.setKakaku(Integer.parseInt(newPriceStr));
+//                    if (newStockStr != null && !newStockStr.isEmpty()) updated.setZaikoSuuryou(Integer.parseInt(newStockStr));
+//                    if (newImage != null && !newImage.isEmpty()) updated.setShouhinGazou(newImage);
+//
+//                    result = dao.updateShohin(updated, oldMei);
+//                }
                 break;
 
             case "delete":
-                int deleteId = Integer.parseInt(request.getParameter("shohinId"));
-                result = dao.deleteShohin(deleteId);
+            	String oldMeiDelete = request.getParameter("oldShouhinMei");
+                
+                result = dao.deleteShohin(oldMeiDelete);
+                
+                if (result) {
+                    request.setAttribute("success", "商品を削除しました！");
+                    
+                    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("error", "商品削除に失敗しました。");
+                    
+                    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+                }
+                
                 break;
 
             default:
@@ -78,11 +99,32 @@ public class ShohinAdminServlet extends HttpServlet {
 //            request.setAttribute("error", "操作に失敗しました。");
 //            request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
 //        }
-        if (result) {
-            request.setAttribute("success", "商品を登録しました！");
+        if (result && ("add".equals(action) || "edit".equals(action))) {
+            Shohin shohin = new Shohin();
+            shohin.setShouhinMei(request.getParameter("shouhinMei"));
+            shohin.setShouhinSetsumei(request.getParameter("shouhinSetsumei"));
+
+            try {
+                shohin.setKakaku(Integer.parseInt(request.getParameter("kakaku")));
+                shohin.setZaikoSuuryou(Integer.parseInt(request.getParameter("zaikoSuuryou")));
+            } catch (NumberFormatException e) {
+                request.setAttribute("error", "失敗しました。");
+                request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+                return;
+            }
+
+            Part part = request.getPart("shouhinGazou");
+            String fileName = (part != null && part.getSubmittedFileName() != null)
+                    ? Paths.get(part.getSubmittedFileName()).getFileName().toString()
+                    : "";
+            shohin.setShouhinGazou(fileName);
+
+            request.setAttribute("registeredShohin", shohin);
+            request.setAttribute("success", "商品を登録・変更しました！");
             request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-        } else {
-            request.setAttribute("error", "商品登録に失敗しました。");
+        } else if (!result) {
+        	
+            request.setAttribute("error", "商品登録・変更に失敗しました。");
             request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
         }
 

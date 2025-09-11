@@ -151,8 +151,8 @@ public class ECsiteDAO {
     }
 
     // 商品更新
-    public boolean updateShohin(Shohin shohin) {
-        String sql = "UPDATE shohin SET shouhin_mei = ?, shouhin_setsumei = ?, kakaku = ?, zaiko_suuryou = ?, shouhin_gazou = ? WHERE shohin_id = ?";
+    public boolean updateShohin(Shohin shohin, String oldShouhinMei) {
+        String sql = "UPDATE shohin SET shouhin_mei = ?, shouhin_setsumei = ?, kakaku = ?, zaiko_suuryou = ?, shouhin_gazou = ? WHERE shouhin_mei = ?";
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, shohin.getShouhinMei());
@@ -160,7 +160,7 @@ public class ECsiteDAO {
             stmt.setInt(3, shohin.getKakaku());
             stmt.setInt(4, shohin.getZaikoSuuryou());
             stmt.setString(5, shohin.getShouhinGazou());
-            stmt.setInt(6, shohin.getShohinId());
+            stmt.setString(6, oldShouhinMei);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,11 +169,11 @@ public class ECsiteDAO {
     }
 
     // 商品削除
-    public boolean deleteShohin(int shohinId) {
-        String sql = "DELETE FROM shohin WHERE shohin_id = ?";
+    public boolean deleteShohin(String oldShouhinMei) {
+        String sql = "DELETE FROM shohin WHERE shouhin_mei = ?";
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, shohinId);
+        	stmt.setString(1, oldShouhinMei);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
