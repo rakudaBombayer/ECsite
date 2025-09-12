@@ -14,7 +14,7 @@
 <div class="search-container">
 <a href="LoginServlet" class="register-button">ログアウト(仮)</a>
 <a href="AccountChangeServlet" class="register-button">アカウント変更画面へ(仮)</a>
-<a href="CartServlet" class="register-button">ショッピングカート画面へ(仮)</a>
+<a href="CartListServlet" class="register-button">ショッピングカート画面へ(仮)</a>
 <a href="HistoryServlet" class="register-button">注文履歴画面へ(仮)</a>
 <a href="AdminServlet" class="register-button">管理者用画面へ(仮)</a>
     <form action="SearchServlet" method="get" class="search-form">

@@ -293,5 +293,108 @@ public class ECsiteDAO {
             return false;
         }
     }
+    
+    public List<CartItem> getCartList(int kaiinId) {
+        List<CartItem> cartList = new ArrayList<>();
+
+        String sql = "SELECT sc.cart_id, sc.shohin_id, sc.quantity, s.shouhin_mei, s.kakaku " +
+                     "FROM shopping_cart sc JOIN shohin s ON sc.shohin_id = s.shohin_id " +
+                     "WHERE sc.kaiin_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, kaiinId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                CartItem item = new CartItem();
+                item.setCartId(rs.getInt("cart_id"));
+                item.setShohinId(rs.getInt("shohin_id"));
+                item.setShohinMei(rs.getString("shouhin_mei"));
+                item.setKakaku(rs.getInt("kakaku"));
+                item.setQuantity(rs.getInt("quantity"));
+                cartList.add(item);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cartList;
+    }
+    public boolean updateCartQuantity(int kaiinId, int shohinId, int quantity) {
+        String sql = "UPDATE shopping_cart SET quantity = ? WHERE kaiin_id = ? AND shohin_id = ?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, quantity);
+            stmt.setInt(2, kaiinId);
+            stmt.setInt(3, shohinId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean deleteCartItem(int kaiinId, int shohinId) {
+        String sql = "DELETE FROM shopping_cart WHERE kaiin_id = ? AND shohin_id = ?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, kaiinId);
+            stmt.setInt(2, shohinId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean insertOrUpdateCart(int kaiinId, int shohinId, int quantity) {
+        String selectSql = "SELECT quantity FROM shopping_cart WHERE kaiin_id = ? AND shohin_id = ?";
+        String updateSql = "UPDATE shopping_cart SET quantity = quantity + ? WHERE kaiin_id = ? AND shohin_id = ?";
+        String insertSql = "INSERT INTO shopping_cart (kaiin_id, shohin_id, quantity) VALUES (?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+
+            // まずは既に存在するか確認
+            try (PreparedStatement selectStmt = conn.prepareStatement(selectSql)) {
+                selectStmt.setInt(1, kaiinId);
+                selectStmt.setInt(2, shohinId);
+
+                ResultSet rs = selectStmt.executeQuery();
+                if (rs.next()) {
+                    // 存在するので UPDATE
+                    try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                        updateStmt.setInt(1, quantity);
+                        updateStmt.setInt(2, kaiinId);
+                        updateStmt.setInt(3, shohinId);
+                        int rows = updateStmt.executeUpdate();
+                        return rows > 0;
+                    }
+                } else {
+                    // 存在しないので INSERT
+                    try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                        insertStmt.setInt(1, kaiinId);
+                        insertStmt.setInt(2, shohinId);
+                        insertStmt.setInt(3, quantity);
+                        int rows = insertStmt.executeUpdate();
+                        return rows > 0;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
 }
