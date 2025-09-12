@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Account;
 import model.ECsiteDAO;
 
 
@@ -43,24 +44,23 @@ protected void doPost(HttpServletRequest request,
 		String password = request.getParameter("pass");
 		
 		ECsiteDAO dao = new ECsiteDAO();
-	    boolean isValid = dao.isValidUser(userId, password);
-	    
-	    
-	    //ログアウトの処理はいったん終了
-	    if (isValid) {
-	        // 認証成功 → メニュー画面へ
-	        HttpSession session = request.getSession();
-	        session.setAttribute("userId", userId); // ログイン状態を保持
 
-	        System.out.println("ログイン成功: " + userId);
-	        
+	    if (dao.isValidUser(userId, password)) {
+	        // ✅ ログイン成功 → アカウント情報取得
+	        Account account = dao.getAccountByNameAndPassword(userId, password);
+
+	        // ✅ セッションに kaiinId を保存
+	        HttpSession session = request.getSession();
+	        session.setAttribute("kaiinId", account.getKaiinId());
+
+	        // 他にも必要があればアカウント情報をセッションに保存
+	        session.setAttribute("account", account);
+
+	        // ✅ メニュー画面へリダイレクト
 	        response.sendRedirect("MenuServlet");
-//	        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/menu.jsp");
-//	        dispatcher.forward(request, response);
 	    } else {
-	        // 認証失敗 → ログイン画面に戻す
-	        System.out.println("ログイン失敗: " + userId);
-	        request.setAttribute("errorMessage", "ユーザーIDまたはパスワードが違います");
+	        // ログイン失敗時の処理
+	        request.setAttribute("errorMessage", "ユーザーIDまたはパスワードが違います。");
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/login.jsp");
 	        dispatcher.forward(request, response);
 	    }

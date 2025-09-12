@@ -113,7 +113,7 @@
 
 	
     <!-- ② 商品変更 -->
-    <form action="ShohinAdminServlet" method="post" enctype="multipart/form-data">
+    <form action="ShohinAdminServlet" method="post" enctype="multipart/form-data" onsubmit="return confirm('本当にこの商品を変更してもいいですか？');">
         <h2>② 商品を変更</h2>
         <input type="hidden" name="action" value="edit">
 
@@ -139,7 +139,7 @@
     </form>
 
     <!-- ③ 商品削除 -->
-    <form action="ShohinAdminServlet" method="post">
+    <form action="ShohinAdminServlet" method="post" onsubmit="return confirm('本当にこの商品を削除しますか？');">
         <h2>③ 商品を削除</h2>
         <input type="hidden" name="action" value="delete">
 

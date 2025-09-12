@@ -208,5 +208,90 @@ public class ECsiteDAO {
         }
         return list;
     }
+    
+ // ECsiteDAO.java に追加
+    public Account getAccountById(int kaiinId) {
+        String sql = "SELECT * FROM account WHERE kaiin_id = ?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, kaiinId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Account account = new Account();
+                account.setKaiinId(rs.getInt("kaiin_id"));
+                account.setShimei(rs.getString("shimei"));
+                account.setPassword(rs.getString("password"));
+                account.setYuubinBangou(rs.getString("yuubin_bangou"));
+                account.setAddress(rs.getString("address"));
+                account.setDenwaBangou(rs.getString("denwa_bangou"));
+                account.setSeinengappi(rs.getDate("seinengappi"));
+                account.setMailAddress(rs.getString("mail_address"));
+                account.setShiharaiHouhou(rs.getString("shiharai_houhou"));
+                return account;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Account getAccountByNameAndPassword(String shimei, String password) {
+        String sql = "SELECT * FROM account WHERE shimei = ? AND password = ?";
+        
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, shimei);
+            stmt.setString(2, password);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Account account = new Account();
+                account.setKaiinId(rs.getInt("kaiin_id"));
+                account.setShimei(rs.getString("shimei"));
+                account.setPassword(rs.getString("password"));
+                account.setYuubinBangou(rs.getString("yuubin_bangou"));
+                account.setAddress(rs.getString("address"));
+                account.setDenwaBangou(rs.getString("denwa_bangou"));
+                account.setSeinengappi(rs.getDate("seinengappi"));
+                account.setMailAddress(rs.getString("mail_address"));
+                account.setShiharaiHouhou(rs.getString("shiharai_houhou"));
+                return account;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public boolean updateAccount(int kaiinId, String shimei, String password, String yuubin, String address,
+            String denwa, Date birth, String mail, String shiharai) {
+
+        String sql = "UPDATE account SET shimei=?, password=?, yuubin_bangou=?, address=?, denwa_bangou=?, seinengappi=?, mail_address=?, shiharai_houhou=? WHERE kaiin_id=?";
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, shimei);
+            stmt.setString(2, password);
+            stmt.setString(3, yuubin);
+            stmt.setString(4, address);
+            stmt.setString(5, denwa);
+            stmt.setDate(6, birth);
+            stmt.setString(7, mail);
+            stmt.setString(8, shiharai);
+            stmt.setInt(9, kaiinId); 
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            return false;
+        }
+    }
 
 }
