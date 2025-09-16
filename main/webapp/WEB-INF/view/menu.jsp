@@ -12,7 +12,7 @@
 <body>
 <h1>メニュー画面</h1>
 <div class="search-container">
-<a href="LoginServlet" class="register-button">ログアウト(仮)</a>
+<a href="LogoutServlet" class="register-button">ログアウト(仮)</a>
 <a href="AccountChangeServlet" class="register-button">アカウント変更画面へ(仮)</a>
 <a href="CartListServlet" class="register-button">ショッピングカート画面へ(仮)</a>
 <a href="HistoryServlet" class="register-button">注文履歴画面へ(仮)</a>
