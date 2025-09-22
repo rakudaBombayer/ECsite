@@ -22,12 +22,7 @@ protected void doGet(HttpServletRequest request,
 		HttpServletResponse response)
 		throws ServletException, IOException {
 		
-	 	// DAOインスタンスを作成
-    	ECsiteDAO dao = new ECsiteDAO();
-
-    	// 接続確認
-    	boolean connected = dao.isConnected();
-    	System.out.println("DB接続状態: " + connected);
+	 	
 	
 	
 	

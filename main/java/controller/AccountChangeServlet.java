@@ -57,7 +57,8 @@ protected void doPost(HttpServletRequest request,
     boolean result = dao.updateAccount(kaiinId, shimei, password, yuubin, address, denwa, birth, mail, shiharai);
 
     if (result) {
-    	
+    	Account updatedAccount = dao.getAccountById(kaiinId);
+    	request.setAttribute("account", updatedAccount); 
         request.setAttribute("successMessage", "アカウント情報を変更しました。");
     } else {
         request.setAttribute("errorMessage", "アカウント情報の変更に失敗しました。");

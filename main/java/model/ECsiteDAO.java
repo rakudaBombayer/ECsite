@@ -118,13 +118,14 @@ public class ECsiteDAO {
         return null; // 取得できなかった場合
     }
  // 商品追加
-    public boolean insertShohin(String name, String desc, int price, int stock,  String image) {
-    	String sql = "INSERT INTO shohin (shouhin_mei, shouhin_setsumei, kakaku, zaiko_suuryou,  shouhin_gazou) " +
-                "VALUES (?, ?, ?, ?, ?)";
+    public boolean insertShohin(String name, String category, String desc, int price, int stock,  String image) {
+    	String sql = "INSERT INTO shohin (shouhin_mei, category_name, shouhin_setsumei, kakaku, zaiko_suuryou,  shouhin_gazou) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
         	System.out.println("DB接続成功");
             System.out.println("name: " + name);
+            System.out.println("name: " + category);
             System.out.println("desc: " + desc);
             System.out.println("price: " + price);
             System.out.println("stock: " + stock);
@@ -133,10 +134,11 @@ public class ECsiteDAO {
         	
         	
             stmt.setString(1, name);
-            stmt.setString(2, desc);
-            stmt.setInt(3, price);
-            stmt.setInt(4, stock);
-            stmt.setString(5, image);
+            stmt.setString(2, category);
+            stmt.setString(3, desc);
+            stmt.setInt(4, price);
+            stmt.setInt(5, stock);
+            stmt.setString(6, image);
             
             //お試し
             int rows = stmt.executeUpdate();
@@ -152,15 +154,16 @@ public class ECsiteDAO {
 
     // 商品更新
     public boolean updateShohin(Shohin shohin, String oldShouhinMei) {
-        String sql = "UPDATE shohin SET shouhin_mei = ?, shouhin_setsumei = ?, kakaku = ?, zaiko_suuryou = ?, shouhin_gazou = ? WHERE shouhin_mei = ?";
+        String sql = "UPDATE shohin SET shouhin_mei = ?, category_name = ?,  shouhin_setsumei = ?, kakaku = ?, zaiko_suuryou = ?, shouhin_gazou = ? WHERE shouhin_mei = ?";
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, shohin.getShouhinMei());
-            stmt.setString(2, shohin.getShouhinSetsumei());
-            stmt.setInt(3, shohin.getKakaku());
-            stmt.setInt(4, shohin.getZaikoSuuryou());
-            stmt.setString(5, shohin.getShouhinGazou());
-            stmt.setString(6, oldShouhinMei);
+            stmt.setString(2, shohin.getCategoryName());
+            stmt.setString(3, shohin.getShouhinSetsumei());
+            stmt.setInt(4, shohin.getKakaku());
+            stmt.setInt(5, shohin.getZaikoSuuryou());
+            stmt.setString(6, shohin.getShouhinGazou());
+            stmt.setString(7, oldShouhinMei);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -293,11 +296,11 @@ public class ECsiteDAO {
             return false;
         }
     }
-    
+                    //ここ-----------------------からです    
     public List<CartItem> getCartList(int kaiinId) {
         List<CartItem> cartList = new ArrayList<>();
 
-        String sql = "SELECT sc.cart_id, sc.shohin_id, sc.quantity, s.shouhin_mei, s.kakaku " +
+        String sql = "SELECT sc.cart_id, sc.shohin_id, sc.quantity, s.shouhin_mei, s.kakaku, s.shouhin_gazou " +
                      "FROM shopping_cart sc JOIN shohin s ON sc.shohin_id = s.shohin_id " +
                      "WHERE sc.kaiin_id = ?";
 
@@ -314,6 +317,7 @@ public class ECsiteDAO {
                 item.setShohinMei(rs.getString("shouhin_mei"));
                 item.setKakaku(rs.getInt("kakaku"));
                 item.setQuantity(rs.getInt("quantity"));
+                item.setShohinGazou(rs.getString("shouhin_gazou"));
                 cartList.add(item);
             }
 
@@ -396,5 +400,223 @@ public class ECsiteDAO {
 
         return false;
     }
+    public boolean insertOrderCustomer(int kaiinId, String shimei, String yuubin, String address,
+            String denwa, String mail, String shiharai, java.sql.Timestamp kounyubi) {
+boolean success = false;
+
+String sql = "INSERT INTO order_customer (kaiin_id, shimei, yuubin_bangou, address, denwa_bangou, mail_address, shiharai_houhou, kounyubi) " +
+"VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+pstmt.setInt(1, kaiinId);
+pstmt.setString(2, shimei);
+pstmt.setString(3, yuubin);
+pstmt.setString(4, address);
+pstmt.setString(5, denwa);
+pstmt.setString(6, mail);
+pstmt.setString(7, shiharai);
+pstmt.setTimestamp(8, kounyubi);
+
+int rows = pstmt.executeUpdate();
+if (rows > 0) {
+success = true;
+}
+} catch (Exception e) {
+e.printStackTrace();
+}
+
+return success;
+}
+    public boolean clearCart(int kaiinId) {
+        String sql = "DELETE FROM shopping_cart WHERE kaiin_id = ?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, kaiinId);
+            int rowsDeleted = ps.executeUpdate();
+            return rowsDeleted >= 0;  // 0件でも成功とみなす
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean insertOrderHistory(int kaiinId, int shohinId, int quantity, java.sql.Timestamp now) {
+        String sql = "INSERT INTO order_history (kaiin_id, shohin_id, quantity, order_time) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, kaiinId);
+            stmt.setInt(2, shohinId);
+            stmt.setInt(3, quantity);
+            stmt.setTimestamp(4, now);
+
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+ // 注文履歴一覧を取得する
+    public List<OrderHistory> getOrderHistoryByKaiinId(int kaiinId) {
+        List<OrderHistory> historyList = new ArrayList<>();
+        String sql = "SELECT oh.order_time, oh.quantity, oh.shohin_id, s.shouhin_mei, s.kakaku, s.shouhin_gazou " + 
+                "FROM order_history oh JOIN shohin s ON oh.shohin_id = s.shohin_id " +
+                "WHERE oh.kaiin_id = ? ORDER BY oh.order_time DESC";
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, kaiinId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                OrderHistory history = new OrderHistory();
+                history.setOrderTime(rs.getTimestamp("order_time"));
+                history.setQuantity(rs.getInt("quantity"));
+                history.setShohinId(rs.getInt("shohin_id"));
+                history.setShohinMei(rs.getString("shouhin_mei"));
+                history.setKakaku(rs.getInt("kakaku"));
+                history.setShohinGazou(rs.getString("shouhin_gazou"));
+                historyList.add(history);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return historyList;
+    }
+    public List<CartItem> getOrderHistory(int kaiinId) {
+        List<CartItem> list = new ArrayList<>();
+        String sql = "SELECT s.shouhin_mei, s.kakaku, oh.quantity, oh.order_time " +
+                "FROM order_history oh " +
+                "JOIN shohin s ON oh.shohin_id = s.shohin_id " +
+                "WHERE oh.kaiin_id = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, kaiinId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CartItem item = new CartItem();
+                item.setShohinMei(rs.getString("shohin_mei"));
+                item.setKakaku(rs.getInt("kakaku"));
+                item.setQuantity(rs.getInt("quantity"));
+                item.setOrderTime(rs.getTimestamp("order_time"));  // Timestampをセット
+                list.add(item);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+    }
+    
+ // 商品名であいまい検索
+    public List<Shohin> searchShohin(String keyword, String category) {
+        List<Shohin> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM shohin WHERE 1=1");
+
+        if (keyword != null && !keyword.isEmpty()) {
+            sql.append(" AND shouhin_mei LIKE ?");
+        }
+        if (category != null && !category.isEmpty()) {
+            sql.append(" AND category_name = ?");
+        }
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            
+            int idx = 1;
+            if (keyword != null && !keyword.isEmpty()) {
+                pstmt.setString(idx++, "%" + keyword + "%");
+            }
+            if (category != null && !category.isEmpty()) {
+                pstmt.setString(idx++, category);
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Shohin s = new Shohin();
+                s.setShohinId(rs.getInt("shohin_id"));
+                s.setShouhinMei(rs.getString("shouhin_mei"));
+                s.setShouhinSetsumei(rs.getString("shouhin_setsumei"));
+                s.setKakaku(rs.getInt("kakaku"));
+                s.setCategoryName(rs.getString("category_name"));
+                s.setShouhinGazou(rs.getString("shouhin_gazou"));
+                list.add(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+        
+    // カテゴリーで検索
+    public List<Product> searchProducts(String name, String category) {
+        List<Product> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM shohin WHERE 1=1");
+
+        // 商品名条件
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND name LIKE ?");
+        }
+
+        // カテゴリー条件
+        if (category != null && !category.isEmpty()) {
+            sql.append(" AND category_name = ?");
+        }
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+
+            int idx = 1;
+            if (name != null && !name.isEmpty()) {
+                pstmt.setString(idx++, "%" + name + "%");
+            }
+            if (category != null && !category.isEmpty()) {
+                pstmt.setString(idx++, category);
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                p.setPrice(rs.getInt("price"));
+                p.setCategoryName(rs.getString("category_name")); // ← 追加
+                list.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    //ログインユーザーで検索してカートの中の個数を検索する処理。
+    
+    public int getCartTotalQuantity(int kaiinId) {
+        String sql = "SELECT SUM(quantity) AS total_items FROM shopping_cart WHERE kaiin_id = ?";
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, kaiinId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total_items");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }
+
+

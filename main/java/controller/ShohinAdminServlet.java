@@ -13,6 +13,8 @@ import jakarta.servlet.http.Part;
 import model.ECsiteDAO;
 import model.Shohin;
 
+//ここからはじめる。商品カテゴリの処理から9/17
+
 @WebServlet("/ShohinAdminServlet")
 @MultipartConfig
 public class ShohinAdminServlet extends HttpServlet {
@@ -30,20 +32,22 @@ public class ShohinAdminServlet extends HttpServlet {
         switch (action) {
             case "add":
                 String name = request.getParameter("shouhinMei");
+                String category = request.getParameter("shouhinCategory");
                 String desc = request.getParameter("shouhinSetsumei");
                 int price = Integer.parseInt(request.getParameter("kakaku"));
                 int stock = Integer.parseInt(request.getParameter("zaikoSuuryou"));
-
+                
                 Part filePart = request.getPart("shouhinGazou");
                 String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
                 
-                result = dao.insertShohin(name, desc, price, stock, fileName);
+                result = dao.insertShohin(name, category, desc, price, stock, fileName);
                 break;
 
             case "edit":
-            	String oldMei = request.getParameter("oldShouhinMei");
+            	String oldMei = request.getParameter("oldShouhinMei");           	
             	String newMei = request.getParameter("shouhinMei");
+            	String newcategory = request.getParameter("shouhinCategory");
             	String newDesc = request.getParameter("shouhinSetsumei");
             	String newPriceStr = request.getParameter("kakaku");
             	String newStockStr = request.getParameter("zaikoSuuryou");
@@ -51,6 +55,7 @@ public class ShohinAdminServlet extends HttpServlet {
 
             	Shohin shohin = new Shohin();
             	shohin.setShouhinMei(newMei);
+            	shohin.setShouhinMei(newcategory);
             	shohin.setShouhinSetsumei(newDesc);
             	shohin.setKakaku(Integer.parseInt(newPriceStr));
             	shohin.setZaikoSuuryou(Integer.parseInt(newStockStr));
@@ -102,6 +107,7 @@ public class ShohinAdminServlet extends HttpServlet {
         if (result && ("add".equals(action) || "edit".equals(action))) {
             Shohin shohin = new Shohin();
             shohin.setShouhinMei(request.getParameter("shouhinMei"));
+            shohin.setCategoryName(request.getParameter("shouhinCategory"));
             shohin.setShouhinSetsumei(request.getParameter("shouhinSetsumei"));
 
             try {

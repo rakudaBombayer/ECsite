@@ -62,7 +62,9 @@ public class CartServlet extends HttpServlet {
         boolean success = dao.insertOrUpdateCart(kaiinId, shohinId, quantity);
 
         if (success) {
-            response.sendRedirect("CartListServlet");
+        	request.setAttribute("successMessage", "カートに追加しました！");
+            request.setAttribute("shohin", shohin); // 商品情報を再表示
+            request.getRequestDispatcher("/WEB-INF/view/shohin_detail.jsp").forward(request, response);
         } else {
             request.setAttribute("errorMessage", "カートに追加できませんでした。");
             request.setAttribute("shohin", shohin);

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Date;
+
 public class CartItem {
     private int cartId;
     private int shohinId;
@@ -7,7 +9,8 @@ public class CartItem {
     private int kakaku;
     private int quantity;
     private int zaikoSuuryou;
-
+    private Date orderTime; 
+    private String shohinGazou;
     // ゲッター・セッター
     public int getCartId() { return cartId; }
     public void setCartId(int cartId) { this.cartId = cartId; }
@@ -28,5 +31,17 @@ public class CartItem {
     }
     public void setZaikoSuuryou(int zaikoSuuryou) {
         this.zaikoSuuryou = zaikoSuuryou;
+    }
+    public Date getOrderTime() {
+        return orderTime;
+    }
+    public void setOrderTime(Date orderTime) {
+        this.orderTime = orderTime;
+    }
+    public String getShohinGazou() {
+        return shohinGazou;
+    }
+    public void setShohinGazou(String shohinGazou) {
+        this.shohinGazou = shohinGazou;
     }
 }

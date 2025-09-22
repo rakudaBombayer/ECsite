@@ -6,89 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>会員情報変更画面</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f9f9f9;
-            padding: 40px;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
-        form {
-            max-width: 500px;
-            margin: auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-        }
-
-        input[type="text"],
-        input[type="password"],
-        input[type="email"],
-        input[type="date"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        input[type="submit"] {
-            margin-top: 25px;
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-        .message {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-       .success {
-    font-size: 1.5em; /* 1.5倍の大きさ */
-    color: green;     /* もし色も変えたい場合 */
-}
-
-.error {
-    font-size: 1.5em;
-    color: red;
-}
-
-
-        .back-link {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .back-link a {
-            color: #555;
-            text-decoration: none;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    
 </head>
 <body>
 
@@ -135,3 +53,134 @@
 
 </body>
 </html>
+
+
+<style>
+    body {
+        font-family: sans-serif;
+        /* 背景画像を設定。URLは好きな画像に変更してください */
+        background: url('images/mori.jpg') no-repeat center center fixed;
+        background-size: cover;     /* 画像を画面いっぱいに拡大 */
+        background-position: center; /* 中央寄せ */
+        background-repeat: no-repeat;
+        padding: 40px;
+        margin: 0;
+        height: 100vh;
+        color: white;
+        /* 黒っぽいオーバーレイを重ねるために位置調整 */
+        position: relative;
+    }
+
+    /* 黒い半透明オーバーレイ */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: -1;
+    }
+
+    h2 {
+        text-align: center;
+        color: white;
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+    }
+
+    form {
+        max-width: 500px;
+        margin: auto;
+        background: rgba(0, 0, 0, 0.7); /* 半透明の黒背景 */
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+    }
+
+    label {
+        display: block;
+        margin-top: 15px;
+        color: #f5f5f5;
+        font-weight: bold;
+        text-shadow: 0 0 3px rgba(0,0,0,0.8);
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="date"],
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 6px;
+        outline: none;
+        box-sizing: border-box;
+        font-size: 1em;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
+        transition: box-shadow 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="email"]:focus,
+    input[type="date"]:focus,
+    select:focus {
+        box-shadow: 0 0 8px 2px #ff0000;
+        background-color: #fff;
+    }
+
+    input[type="submit"] {
+        display: block;
+        margin: 25px auto 0 auto; 
+        width: 150px;             
+        padding: 12px;
+        background-color: #ff0000;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 0 10px #ff0000;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #af0e0e;
+        box-shadow: 0 0 15px #af0e0e;
+    }
+
+    .message {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .success {
+        font-size: 1.5em; 
+        color: #90ee90; /* 緑っぽい成功色 */
+        text-shadow: 0 0 5px rgba(144,238,144,0.8);
+    }
+
+    .error {
+        font-size: 1.5em;
+        color: #ff6666; /* 柔らかい赤 */
+        text-shadow: 0 0 5px rgba(255,102,102,0.8);
+    }
+
+    .back-link {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .back-link a {
+        color: #ff4d4d;
+        font-weight: bold;
+        text-decoration: none;
+        text-shadow: 0 0 4px rgba(255, 77, 77, 0.9);
+        transition: text-decoration 0.3s ease;
+    }
+
+    .back-link a:hover {
+        text-decoration: underline;
+    }
+</style>

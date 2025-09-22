@@ -9,7 +9,8 @@ public class Shohin {
     private int zaikoSuuryou;
     private String shouhinGazou;
     private String oldShouhinMei;
-
+    private String categoryName;
+    
     // ゲッターとセッター
     public int getShohinId() { return shohinId; }
     public void setShohinId(int shohinId) { this.shohinId = shohinId; }
@@ -34,5 +35,8 @@ public class Shohin {
     
     public String getOldShouhinMei() { return oldShouhinMei; }
     public void setOldShouhinMei(String oldShouhinMei) { this.oldShouhinMei = oldShouhinMei; }
+    
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
 }

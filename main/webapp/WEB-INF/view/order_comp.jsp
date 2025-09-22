@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,9 +11,29 @@
 </head>
 <h1>注文が完了しました。</h1>
 <body>
-<div>購入した商品が出る。</div>
-<div><a href="MenuServlet">メニュー</a></div>
 
+
+<c:if test="${not empty cartList}">
+    <table>
+        <tr>
+            <th>商品名</th>
+            <th>価格</th>
+            <th>数量</th>
+            <th>小計</th>
+        </tr>
+        <c:forEach var="item" items="${cartList}">
+            <tr>
+                <td>${item.shohinMei}</td>
+                <td>${item.kakaku} 円</td>
+                <td>${item.quantity}</td>
+                <td>${item.kakaku * item.quantity} 円</td>
+            </tr>
+        </c:forEach>
+    </table>
+
+    <h3>合計金額: ${totalPrice} 円</h3>
+</c:if>
+<div><a href="MenuServlet">メニュー</a></div>
 </body>
 </html>
 
