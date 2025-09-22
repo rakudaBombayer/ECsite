@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Account;
 import model.ECsiteDAO;
 import model.Shohin;
 
@@ -30,11 +31,14 @@ protected void doGet(HttpServletRequest request,
 		List<Shohin> shohinList = dao.getAllShohin(); // 商品情報を取得
 	
 		int CartItem = dao.getCartTotalQuantity(kaiinId);
-	
+		Account account = dao.getAccountById(kaiinId);
 	
 		request.setAttribute("shohinList", shohinList);
 		request.setAttribute("cartNum", CartItem);
+		session.setAttribute("loginUser", account); 
 		
+	    
+
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/menu.jsp");
 		dispatcher.forward(request, response);

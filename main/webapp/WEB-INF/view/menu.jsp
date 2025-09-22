@@ -16,7 +16,14 @@
 
 </head>
 <body>
-
+<div id="slider-area" class="bgextend bgRLextendTrigger">
+    <div class="bgappearTrigger">
+        <div id="slider">
+        	<div class="slider-text js_typing_top">GUNPLA</div>
+        	<div class="slider-text-under js_typing_top">EC SHOP</div>
+        </div>
+    </div>  
+</div>
 <div class="header-icons">
 	<div class="openbtn"><span></span><span></span><span></span></div>
 	<div class="cart"><a href="CartListServlet">
@@ -31,22 +38,17 @@
 <ul>
 <li><a href="LogoutServlet">Logout</a></li>	
 <li><a href="AccountChangeServlet">Account</a></li>	
-<li><a href="HistoryServlet">Purchase History</a></li>	
-<li><a href="AdminServlet">Admin</a></li>	
+<li><a href="HistoryServlet">Purchase History</a></li>
+<c:if test="${loginUser.admin}">	
+	<li><a href="AdminServlet">Admin</a></li>
+</c:if>
 </ul>
 </div>
 </nav>
 
 
 
-<div id="slider-area" class="bgextend bgRLextendTrigger">
-    <div class="bgappearTrigger">
-        <div id="slider">
-        	<div class="slider-text js_typing_top">GUNPLA</div>
-        	<div class="slider-text-under js_typing_top">EC SHOP</div>
-        </div>
-    </div>  
-</div>
+
 <div class="search-container">
 
 
@@ -55,10 +57,6 @@
 <a href="CartListServlet" class="register-button">ショッピングカート画面へ(仮)</a>
 <a href="HistoryServlet" class="register-button">注文履歴画面へ(仮)</a>
  -->
-<!--アドミンユーザーのみ表示: 未実装-->
-<a href="AdminServlet" class="register-button">管理者用画面へ(仮)</a>
-<!--アドミンユーザーのみ表示: 未実装-->
-
 
     <form action="SearchServlet" method="get" class="search-form">
 			<!-- 商品名 -->
@@ -75,10 +73,11 @@
 			<input type="submit" value="検索">
 	</form>
     
+    
 </div>
 
 <!--  商品画像を3つずつ表示-->
-<h2 class="js_typing_item">SHOP</h2>
+<h2 class="js_typing_item redmoji">ITEMS</h2>
 <div class="item-container">
     <c:forEach var="item" items="${shohinList}">
     <a href="ShohinDetailServlet?shohin_id=${item.shohinId}" class="item-link">
@@ -110,6 +109,7 @@
 	  background-color: #000000; /* 完全な黒 */
 	  color: #ffffff;            /* テキストを白にして読みやすく */
 	  font-family: 'Oswald', sans-serif;
+	  
 	}
 	
 	.header-icons {
@@ -186,6 +186,7 @@
     }
     .item-box {
     	border: 1px solid #ccc;         /* 枠線の色と太さ */
+    	box-shadow: 0 0 10px red, 0 0 20px crimson;
     	background-color: #222;
     	padding: 16px;                  /* 内側の余白 */
     	margin-bottom: 20px;            /* 下の余白 */
@@ -212,6 +213,9 @@
 	}
 	.item-box:hover {
   		transform: translateY(0) rotate(-5deg);
+	}
+	.redmoji{
+		text-shadow: 0 0 10px red, 0 0 20px crimson;
 	}
 .item-container {
   display: grid;

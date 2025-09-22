@@ -232,6 +232,7 @@ public class ECsiteDAO {
                 account.setSeinengappi(rs.getDate("seinengappi"));
                 account.setMailAddress(rs.getString("mail_address"));
                 account.setShiharaiHouhou(rs.getString("shiharai_houhou"));
+                account.setAdmin(rs.getString("is_admin").equals("t"));
                 return account;
             }
 
