@@ -691,16 +691,15 @@ return success;
         }
     }
     
-    //無限スクロール追加(ランダムで個数を選んで無限スクロール)
+    //無限スクロール追加(無限スクロール)
     public List<Shohin> getShohinList(int offset, int limit) throws SQLException {
-        String sql = "SELECT * FROM shohin ORDER BY shohin_id LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM shohin ORDER BY shohin_id OFFSET ?";
         List<Shohin> list = new ArrayList<>();
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, limit);
-            pstmt.setInt(2, offset);
+            pstmt.setInt(1, offset);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {

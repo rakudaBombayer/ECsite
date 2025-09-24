@@ -321,6 +321,8 @@
 }
 
 
+
+
 </style>
 
 <script>
@@ -403,11 +405,12 @@ document.addEventListener("DOMContentLoaded", function () {
   itemBoxes.forEach(el => boxObserver.observe(el));
 });
 
-let offset = 10; // 最初に表示した件数
-let loading = false;
+let offset = 0; // 最初に表示した件数
+let isSearching = false;
+
 
 window.addEventListener('scroll', () => {
-  if (loading) return;
+	if (loading || isSearching) return;
 
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
     loading = true;
@@ -431,7 +434,7 @@ window.addEventListener('scroll', () => {
           textObserver.observe(el);
         });
 		
-        offset += 10;
+        offset += 29;
         loading = false;
       })
       .catch(err => {

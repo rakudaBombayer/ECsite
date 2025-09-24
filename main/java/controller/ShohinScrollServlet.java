@@ -25,7 +25,7 @@ public class ShohinScrollServlet extends HttpServlet {
         String limitParam = request.getParameter("limit");
 
         int offset = 0;
-        int limit = 10;
+        int limit = 29;
 
         if (offsetParam != null && !offsetParam.isEmpty()) {
             offset = Integer.parseInt(offsetParam);

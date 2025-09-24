@@ -37,7 +37,7 @@ protected void doGet(HttpServletRequest request,
 		}
 
 		String limitParam = request.getParameter("limit");
-		int limit = 10; // デフォルト値
+		int limit = 29; // デフォルト値
 
 		if (limitParam != null && !limitParam.isEmpty()) {
 		    limit = Integer.parseInt(limitParam);
