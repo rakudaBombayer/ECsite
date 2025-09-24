@@ -1,162 +1,135 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>購入内容確認画面</title>
+    <meta charset="UTF-8">
+    <title>購入内容確認画面</title>
 
-<style>
-body {
-	font-family: 'Oswald', sans-serif;
-}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
 
-h1 {
-	margin-bottom: 20px;
-	color: white;
-	text-align: center;
-}
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: url('<%= request.getContextPath() %>/images/care.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
 
-table {
-	border-collapse: separate;
-	border-spacing: 0;
-	width: 80%;
-	margin: 0 auto 20px auto;
-	border: 2px solid black; /* テーブル外枠を黒く */
-	border-radius: 12px;
-	overflow: hidden;
-}
+        h1 {
+            margin: 30px 0;
+            color: white;
+            text-align: center;
+            text-shadow: 0 0 10px red, 0 0 20px crimson;
+        }
 
-th, td {
-	border: 1px solid black; /* セルの罫線も黒く */
-	padding: 10px;
-	text-align: center;
-}
+        table {
+            width: 80%;
+            margin: 0 auto 30px auto;
+            border-collapse: collapse;
+            background-color: rgba(34, 34, 34, 0.9); /* 背景半透明 */
+            color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+        }
 
-th, td {
-	border: 1px solid #999;
-	padding: 8px;
-	text-align: center;
-}
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
 
-.form-section {
-	margin-top: 30px;
-}
+        th {
+            background-color: #333;
+        }
 
-.form-group {
-	margin-bottom: 10px;
-}
+        img {
+            width: 150px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
 
-input[type="text"], textarea {
-	width: 300px;
-	padding: 5px;
-}
+        .register-button,
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            margin: 10px;
+        }
 
-textarea {
-	height: 100px;
-}
+        .register-button {
+            background-color: red;
+            color: white;
+        }
 
-.register-button {
-	padding: 10px 20px;
-	background-color: #2b90d9;
-	color: white;
-	border: none;
-	cursor: pointer;
-}
+        .register-button:hover {
+            background-color: darkred;
+        }
 
-.register-button:hover {
-	background-color: #1c6ca8;
-}
+        .back-button {
+            background-color: gray;
+            color: white;
+        }
 
-body {
-	background-color: black;
-	color: white;
-}
+        .back-button:hover {
+            background-color: #555;
+        }
 
-.register-button {
-	background-color: red;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	font-size: 16px;
-	cursor: pointer;
-	border-radius: 5px;
-}
-
-/* 戻るボタン専用のスタイル */
-.back-button {
-	background-color: gray;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	font-size: 16px;
-	cursor: pointer;
-	border-radius: 5px;
-}
-/* ボタンを中央揃えで横並びにする */
-.button-container {
-	display: flex;
-	justify-content: center;
-	gap: 20px;
-	margin-top: 30px;
-}
-</style>
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+    </style>
 </head>
-
 <body>
 
-	<h1>購入してよろしいですか？</h1>
+    <h1>購入してよろしいですか？</h1>
 
-	<c:if test="${empty cartList}">
-		<p>カートには商品がありません。</p>
-	</c:if>
+    <c:if test="${empty purchasedList}">
+        <p style="text-align:center;">購入履歴はありません。</p>
+    </c:if>
 
-	<c:if test="${not empty cartList}">
+    <c:if test="${not empty purchasedList}">
+        <table>
+            <tr>
+                <th>商品画像</th>
+                <th>商品名</th>
+                <th>価格</th>
+                <th>数量</th>
+                <th>小計</th>
+            </tr>
+            <c:forEach var="item" items="${purchasedList}">
+                <tr>
+                    <td>
+                        <img src="${pageContext.request.contextPath}/images/${item.shouhinGazou}" alt="${item.shohinMei}">
+                    </td>
+                    <td>${item.shohinMei}</td>
+                    <td><fmt:formatNumber value="${item.kakaku}" type="number"/> 円</td>
+                    <td>${item.quantity}</td>
+                    <td><fmt:formatNumber value="${item.kakaku * item.quantity}" type="number"/> 円</td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:if>
 
-		<table>
-			<tr style="background-color: #fff; color: #000;">
-				<th>商品</th>
-				<th>価格</th>
-				<th>数量</th>
-				<th>小計</th>
-			</tr>
-			<c:forEach var="item" items="${cartList}">
-				<tr style="background-color: #fff; color: #000;">
-					<td style="text-align: left;"><img
-						src="images/CB300R-HONDA.jpg" alt="商品画像"
-						style="width: 100px; margin-right: 10px; vertical-align: middle;">
-						${item.shohinMei}</td>
-					<td>${item.kakaku}円</td>
-					<td>${item.quantity}</td>
-					<td>${item.kakaku * item.quantity}円</td>
-				</tr>
-			</c:forEach>
-
-			<tr style="background-color: #000; color: #fff;">
-				<td colspan="3" style="text-align: right; font-weight: bold;">合計金額：</td>
-				<td style="font-weight: bold;">${totalPrice}円</td>
-			</tr>
-		</table>
-
-
-
-
-		<div class="button-container">
-			<form action="OrderCompServlet" method="post">
-				<input type="submit" value="確定" class="register-button">
-			</form>
-
-			<a href="OrderServlet" class="back-button">戻る</a>
-			<style>
-				.back-button {
-				text-decoration: none;
-				}
-			</style>
-		</div>
-	</c:if>
-	<br>
+    <div class="button-container">
+        <form action="OrderCompServlet" method="post" style="display: inline;">
+            <input type="submit" value="確定" class="register-button">
+        </form>
+        <a href="OrderServlet" class="back-button">戻る</a>
+    </div>
 
 </body>
 </html>

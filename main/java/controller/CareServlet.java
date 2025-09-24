@@ -30,25 +30,36 @@ public class CareServlet extends HttpServlet {
             return;
         }
 
+//        ECsiteDAO dao = new ECsiteDAO();
+//        List<CartItem> cartList = dao.getCartList(kaiinId);
+//
+//        request.setAttribute("cartList", cartList);
+//
+//        // 合計金額を計算
+//        int totalPrice = 0;
+//        for (CartItem item : cartList) {
+//            totalPrice += item.getKakaku() * item.getQuantity();
+//        }
+//        request.setAttribute("totalPrice", totalPrice);
+//
+//        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/care.jsp");
+//        dispatcher.forward(request, response);
+//    }
+//
+//    protected void doPost(HttpServletRequest request,
+//            HttpServletResponse response)
+//            throws ServletException, IOException {
+//        // POST時の処理があればここに追加
+//    }
+//}
         ECsiteDAO dao = new ECsiteDAO();
-        List<CartItem> cartList = dao.getCartList(kaiinId);
+        // ここでは「購入確認」なので、DB上の order_history ではなく
+        // 現在のカート内容を取得する
+        List<CartItem> purchasedList = dao.getCartList(kaiinId);
 
-        request.setAttribute("cartList", cartList);
-
-        // 合計金額を計算
-        int totalPrice = 0;
-        for (CartItem item : cartList) {
-            totalPrice += item.getKakaku() * item.getQuantity();
-        }
-        request.setAttribute("totalPrice", totalPrice);
+        request.setAttribute("purchasedList", purchasedList);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/care.jsp");
         dispatcher.forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException, IOException {
-        // POST時の処理があればここに追加
     }
 }

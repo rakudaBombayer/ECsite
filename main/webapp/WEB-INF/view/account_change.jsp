@@ -70,20 +70,11 @@
         /* 黒っぽいオーバーレイを重ねるために位置調整 */
         position: relative;
     }
-
-    /* 黒い半透明オーバーレイ */
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-color: rgba(0, 0, 0, 0.6);
-        z-index: -1;
-    }
-
     h2 {
         text-align: center;
         color: white;
         text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+       text-shadow: 0 0 10px red, 0 0 20px crimson;
     }
 
     form {
@@ -170,13 +161,14 @@
     .back-link {
         text-align: center;
         margin-top: 30px;
+        text-shadow: 0 0 8px #ff0000;
     }
 
     .back-link a {
-        color: #ff4d4d;
+        color: #ffffff;
         font-weight: bold;
         text-decoration: none;
-        text-shadow: 0 0 4px rgba(255, 77, 77, 0.9);
+        text-shadow: 0 0 8px #ff0000;
         transition: text-decoration 0.3s ease;
     }
 

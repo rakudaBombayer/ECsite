@@ -136,7 +136,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>ガンプラショップ</h1>
+        <h1>GUNPLA SHOP</h1>
 
         <form action="LoginServlet" method="post">
             ユーザーID:<br>

@@ -19,28 +19,18 @@
             z-index: 0;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* 黒の半透明オーバーレイ */
-            z-index: -1;
-        }
-
         h1 {
             margin: 30px 0;
             color: white;
             text-align: center;
+            text-shadow: 0 0 10px red, 0 0 20px crimson;
         }
 
         table {
             width: 80%;
             margin: 0 auto;
             border-collapse: collapse;
-            background-color: rgba(34, 34, 34, 0.9); /* 少し透明な背景 */
+            background-color: rgba(34, 34, 34, 0.9);
             color: white;
             border-radius: 10px;
             overflow: hidden;
@@ -117,6 +107,25 @@
             background-color: darkred;
         }
 
+        /* 戻るリンク用スタイル */
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            text-shadow: 0 0 8px #ff0000;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
         a {
             color: red;
             display: block;
@@ -165,7 +174,7 @@
                     <!-- 商品画像（リンク付き） -->
                     <td>
                         <a href="ShohinDetailServlet?shohin_id=${item.shohinId}">
-                            <img src="${pageContext.request.contextPath}/images/${item.shohinGazou}" 
+                            <img src="${pageContext.request.contextPath}/images/${item.shouhinGazou}" 
                                  alt="${item.shohinMei}" class="product-image">
                         </a>
                     </td>
@@ -201,7 +210,10 @@
     </c:if>
 
     <a href="OrderServlet" class="action-button">商品を購入手続きへ</a>
-    <a href="MenuServlet" class="action-button">メニューに戻る</a>
+
+    <div class="back-link">
+        <a href="MenuServlet">メニューに戻る</a>
+    </div>
 
 </body>
 </html>

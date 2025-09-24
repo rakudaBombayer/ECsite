@@ -241,7 +241,6 @@ public class ECsiteDAO {
         }
         return null;
     }
-
     public Account getAccountByNameAndPassword(String shimei, String password) {
         String sql = "SELECT * FROM account WHERE shimei = ? AND password = ?";
         
@@ -318,7 +317,7 @@ public class ECsiteDAO {
                 item.setShohinMei(rs.getString("shouhin_mei"));
                 item.setKakaku(rs.getInt("kakaku"));
                 item.setQuantity(rs.getInt("quantity"));
-                item.setShohinGazou(rs.getString("shouhin_gazou"));
+                item.setShouhinGazou(rs.getString("shouhin_gazou"));
                 cartList.add(item);
             }
 
@@ -601,8 +600,62 @@ return success;
         return list;
     }
     
-    //ログインユーザーで検索してカートの中の個数を検索する処理。
+    //------ ↓ 購入済み商品
+    public List<CartItem> getPurchasedItemsByKaiinId(int kaiinId) {
+        List<CartItem> purchasedList = new ArrayList<>();
+
+        String sql = "SELECT s.shohin_id, s.shouhin_mei, s.kakaku, s.shouhin_gazou, oh.quantity, oh.order_time " +
+                     "FROM order_history oh " +
+                     "JOIN shohin s ON oh.shohin_id = s.shohin_id " +
+                     "WHERE oh.kaiin_id = ? " +
+                     "ORDER BY oh.order_time DESC";
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, kaiinId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                CartItem item = new CartItem();
+                item.setShohinId(rs.getInt("shohin_id"));
+                item.setShohinMei(rs.getString("shouhin_mei"));
+                item.setKakaku(rs.getInt("kakaku"));
+                item.setQuantity(rs.getInt("quantity"));
+                item.setShouhinGazou(rs.getString("shohin_gazou"));  //---setShouhinGazou に修正した
+                item.setOrderTime(rs.getTimestamp("order_time"));
+
+                purchasedList.add(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return purchasedList;
+    }
     
+    //------ ↑ 購入済み商品
+    
+    /** 
+     * 商品IDに対応するサブ画像リストを取得する
+     */
+    public List<String> getPicsByShohinId(int shohinId) {
+        List<String> pics = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+            String sql = "SELECT pic FROM t_pic WHERE shohin_id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, shohinId);
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    pics.add(rs.getString("pic"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return pics;
+    }    
     public int getCartTotalQuantity(int kaiinId) {
         String sql = "SELECT SUM(quantity) AS total_items FROM shopping_cart WHERE kaiin_id = ?";
         try (Connection con = getConnection();
@@ -617,7 +670,54 @@ return success;
         }
         return 0;
     }
+        
+    public boolean updateZaiko(int shohinId, int quantity) {
+        String sql = "UPDATE shohin " +
+                     "SET zaiko_suuryou = zaiko_suuryou - ? " +
+                     "WHERE shohin_id = ? AND zaiko_suuryou >= ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, quantity);
+            pstmt.setInt(2, shohinId);
+            pstmt.setInt(3, quantity);
+
+            int rows = pstmt.executeUpdate();
+            return rows > 0;  // 成功したら true
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    //無限スクロール追加(ランダムで個数を選んで無限スクロール)
+    public List<Shohin> getShohinList(int offset, int limit) throws SQLException {
+        String sql = "SELECT * FROM shohin ORDER BY shohin_id LIMIT ? OFFSET ?";
+        List<Shohin> list = new ArrayList<>();
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, limit);
+            pstmt.setInt(2, offset);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Shohin s = new Shohin();
+                s.setShohinId(rs.getInt("shohin_id"));
+                s.setShouhinMei(rs.getString("shouhin_mei"));
+                s.setKakaku(rs.getInt("kakaku"));
+                s.setShouhinGazou(rs.getString("shouhin_gazou"));
+        
+                list.add(s);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 
 }
-
-

@@ -33,15 +33,6 @@
         overflow-x: hidden;
     }
 
-    /* 背景の暗めオーバーレイ */
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-color: rgba(0, 0, 0, 0.65);
-        z-index: 0;
-    }
-
     /* フォームはオーバーレイより前に表示 */
     form, h2, a.register-button {
         position: relative;
@@ -53,6 +44,7 @@
         font-weight: bold;
         margin-bottom: 30px;
         color: white;
+        text-shadow: 0 0 10px red, 0 0 20px crimson;
     }
 
     form {
@@ -133,35 +125,35 @@
  <h2>【会員登録】</h2>
 <form action="RegisterServlet" method="post">
     <div>
-        <label>氏名</label><br>
+        <label>氏名</label>
         <input type="text" name="shimei" size="40" placeholder="氏名を入力" required>
     </div>
     <div>
-        <label>パスワード</label><br>
+        <label>パスワード</label>
         <input type="text" name="password" size="40" placeholder="パスワードを入力" required>
     </div>
     <div>
-        <label>郵便番号</label><br>
+        <label>郵便番号</label>
         <input type="text" name="yuubin_bangou" id="zipcode" size="40" placeholder="郵便番号を入力" required>
     </div>
     <div>
-        <label>住所</label><br>
+        <label>住所</label>
         <input type="text" name="address" size="40" id="address" placeholder="住所を入力" required>
     </div>
     <div>
-        <label>電話番号</label><br>
+        <label>電話番号</label>
         <input type="text" name="denwa_bangou" size="40" placeholder="電話番号を入力" required>
     </div>
     <div>
-        <label>生年月日</label><br>
+        <label>生年月日</label>
         <input type="date" name="seinengappi" size="40" placeholder="生年月日を入力" required>
     </div>
     <div>
-        <label>メールアドレス</label><br>
+        <label>メールアドレス</label>
         <input type="text" name="mail_address" size="40" placeholder="メールアドレスを入力" required>
     </div>
     <div>
-        <label>支払方法</label><br>
+        <label>支払方法</label>
         <input type="text" name="shiharai_houhou" size="40" placeholder="支払方法を入力" required>
     </div>
     <div>

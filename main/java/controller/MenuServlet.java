@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -26,10 +28,34 @@ protected void doGet(HttpServletRequest request,
 		
 		HttpSession session = request.getSession();
 		int kaiinId = (int) session.getAttribute("kaiinId");
+		
+		String offsetParam = request.getParameter("offset");
+		int offset = 0; // デフォルト値
+
+		if (offsetParam != null && !offsetParam.isEmpty()) {
+		    offset = Integer.parseInt(offsetParam);
+		}
+
+		String limitParam = request.getParameter("limit");
+		int limit = 10; // デフォルト値
+
+		if (limitParam != null && !limitParam.isEmpty()) {
+		    limit = Integer.parseInt(limitParam);
+		}
 
 		ECsiteDAO dao = new ECsiteDAO(); // DAOクラスのインスタンス
-		List<Shohin> shohinList = dao.getAllShohin(); // 商品情報を取得
-	
+		//無限スクロールから始める。
+		
+		List<Shohin> shohinList = new ArrayList<>();
+		
+		try {
+			shohinList = dao.getShohinList(offset, limit);
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		    // エラー時の処理（必要なら）
+		}
+		
+		
 		int CartItem = dao.getCartTotalQuantity(kaiinId);
 		Account account = dao.getAccountById(kaiinId);
 	

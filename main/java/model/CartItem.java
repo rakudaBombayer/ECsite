@@ -8,10 +8,11 @@ public class CartItem {
     private String shohinMei;
     private int kakaku;
     private int quantity;
+    private String shouhinGazou;   // ✅ ← 正しいフィールド（画像）
     private int zaikoSuuryou;
-    private Date orderTime; 
-    private String shohinGazou;
-    // ゲッター・セッター
+    private Date orderTime;
+
+    // --- ゲッター・セッター ---
     public int getCartId() { return cartId; }
     public void setCartId(int cartId) { this.cartId = cartId; }
 
@@ -26,22 +27,25 @@ public class CartItem {
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public String getShouhinGazou() {
+        return shouhinGazou;
+    }
+    public void setShouhinGazou(String shouhinGazou) {
+        this.shouhinGazou = shouhinGazou;
+    }
+
     public int getZaikoSuuryou() {
         return zaikoSuuryou;
     }
     public void setZaikoSuuryou(int zaikoSuuryou) {
         this.zaikoSuuryou = zaikoSuuryou;
     }
+
     public Date getOrderTime() {
         return orderTime;
     }
     public void setOrderTime(Date orderTime) {
         this.orderTime = orderTime;
-    }
-    public String getShohinGazou() {
-        return shohinGazou;
-    }
-    public void setShohinGazou(String shohinGazou) {
-        this.shohinGazou = shohinGazou;
     }
 }

@@ -6,95 +6,110 @@
 <head>
     <meta charset="UTF-8">
     <title>注文者情報確認</title>
-   <style>
-body {
-	font-family: 'Oswald', sans-serif;
-	background-color: #000000;
-	padding: 40px;
-}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
 
-h2 {
-	text-align: center;
-}
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: url('<%= request.getContextPath() %>/images/order.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 40px;
+            position: relative;
+            z-index: 0;
+        }
+       
 
-form {
-	max-width: 500px;
-	margin: auto;
-	background: #000000;
-	padding: 30px;
-	border-radius: 8px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        h2 {
+            text-align: center;
+            color: white;
+            text-shadow: 0 0 10px red, 0 0 20px crimson;
+        }
 
-label {
-	display: block;
-	margin-top: 15px;
-	color: white;
-}
+        form {
+            max-width: 500px;
+            margin: auto;
+            background: rgba(34, 34, 34, 0.9);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+        }
 
-input[type="text"], input[type="password"], input[type="email"], input[type="date"],
-	select {
-	width: 100%;
-	padding: 10px;
-	margin-top: 5px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
+        label {
+            display: block;
+            margin-top: 15px;
+            color: white;
+        }
 
-input[type="submit"] {
-	margin-top: 25px;
-	width: 30%;
-	padding: 12px;
-	background-color: #db433d;
-	border: none;
-	color: white;
-	font-size: 16px;
-	border-radius: 4px;
-	cursor: pointer;
-}
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #111;
+            color: white;
+        }
 
-input[type="submit"]:hover {
-	background-color: #FF0000;
-}
+        input[type="submit"] {
+            margin-top: 25px;
+            width: 40%;
+            padding: 12px;
+            background-color: red;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-.message {
-	text-align: center;
-	margin-top: 20px;
-}
+        input[type="submit"]:hover {
+            background-color: darkred;
+        }
 
-.success {
-	font-size: 1.5em; /* 1.5倍の大きさ */
-	color: green; /* もし色も変えたい場合 */
-}
+        .message {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-.error {
-	font-size: 1.5em;
-	color: red;
-}
+        .success {
+            font-size: 1.5em;
+            color: green;
+        }
 
-.back-link {
-	text-align: center;
-	margin-top: 30px;
-}
+        .error {
+            font-size: 1.5em;
+            color: red;
+        }
 
-.back-link a {
-	color: #555;
-	text-decoration: none;
-}
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+           
+        }
 
-.back-link a:hover {
-	text-decoration: underline;
-}
+        .back-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            text-shadow: 0 0 8px #ff0000;
+        }
 
-h2 {
-	color: white;
-}
-
-</style>
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
 <h2>注文者情報確認</h2>
+
 <div class="message">
     <c:if test="${not empty successMessage}">
         <p class="success">${successMessage}</p>
@@ -103,6 +118,7 @@ h2 {
         <p class="error">${errorMessage}</p>
     </c:if>
 </div>
+
 <form action="OrderServlet" method="post">
     <label>氏名:</label>
     <input type="text" name="shimei" value="${account.shimei}" required>
@@ -116,15 +132,15 @@ h2 {
     <label>電話番号:</label>
     <input type="text" name="denwa_bangou" value="${account.denwaBangou}">
 
-      <label>メールアドレス:</label>
+    <label>メールアドレス:</label>
     <input type="email" name="mail_address" value="${account.mailAddress}">
 
     <label>支払い方法:</label>
     <input type="text" name="shiharaiHouhou" value="${account.shiharaiHouhou}">
-    
+
     <div style="display: flex; justify-content: center;">
-			<input type="submit" value="次へ">
-		</div>
+        <input type="submit" value="次へ">
+    </div>
 </form>
 
 <div class="back-link">

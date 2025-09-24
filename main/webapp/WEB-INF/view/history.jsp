@@ -20,17 +20,6 @@
       min-height: 100vh;
     }
 
-    /* 黒い半透明オーバーレイ */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.65);
-      z-index: 0;
-    }
-
     /* 全体を上に重ねる */
     body > * {
       position: relative;
@@ -53,6 +42,11 @@
       gap: 20px;
     }
 
+    .order-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
     .order-card {
       display: flex;
       gap: 20px;
@@ -65,6 +59,7 @@
 
     .order-card:hover {
       transform: scale(1.02);
+      box-shadow: 0 0 18px rgba(255, 50, 50, 0.6);
     }
 
     .order-image {
@@ -137,24 +132,24 @@
     <c:otherwise>
       <div class="order-list">
         <c:forEach var="item" items="${orderHistory}">
-          <div class="order-card">
-            <!-- 左：画像 -->
-            <div class="order-image">
-              <a href="ShohinDetailServlet?shohin_id=${item.shohinId}">
+          <a href="ShohinDetailServlet?shohin_id=${item.shohinId}" class="order-link">
+            <div class="order-card">
+              <!-- 左：画像 -->
+              <div class="order-image">
                 <img src="${pageContext.request.contextPath}/images/${item.shohinGazou}" alt="${item.shohinMei}">
-              </a>
-            </div>
+              </div>
 
-            <!-- 右：詳細 -->
-            <div class="order-info">
-              <div><strong>商品名：</strong><c:out value="${item.shohinMei}"/></div>
-              <div><strong>価格：</strong><c:out value="${item.kakaku}"/>円</div>
-              <div><strong>数量：</strong><c:out value="${item.quantity}"/></div>
-              <div><strong>注文日時：</strong>
-                <fmt:formatDate value="${item.orderTime}" pattern="yyyy年MM月dd日 HH:mm"/>
+              <!-- 右：詳細 -->
+              <div class="order-info">
+                <div><strong>商品名：</strong><c:out value="${item.shohinMei}"/></div>
+                <div><strong>価格：</strong><c:out value="${item.kakaku}"/>円</div>
+                <div><strong>数量：</strong><c:out value="${item.quantity}"/></div>
+                <div><strong>注文日時：</strong>
+                  <fmt:formatDate value="${item.orderTime}" pattern="yyyy年MM月dd日 HH:mm"/>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
         </c:forEach>
       </div>
     </c:otherwise>

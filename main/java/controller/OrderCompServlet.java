@@ -42,7 +42,14 @@ public class OrderCompServlet extends HttpServlet {
         List<CartItem> cartList = dao.getCartList(kaiinId);
         boolean historySuccess = true;
         for (CartItem item : cartList) {
+            // 注文履歴に登録
             if (!dao.insertOrderHistory(kaiinId, item.getShohinId(), item.getQuantity(), now)) {
+                historySuccess = false;
+                break;
+            }
+
+            // 在庫を減算
+            if (!dao.updateZaiko(item.getShohinId(), item.getQuantity())) {
                 historySuccess = false;
                 break;
             }
