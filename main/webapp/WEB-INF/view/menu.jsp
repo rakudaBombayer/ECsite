@@ -78,7 +78,7 @@
 
 <!--  商品画像を3つずつ表示-->
 <h2 class="js_typing_item redmoji">ITEMS</h2>
-<%-- <div class="item-container">
+<div class="item-container">
     <c:forEach var="item" items="${shohinList}">
     <a href="ShohinDetailServlet?shohin_id=${item.shohinId}" class="item-link">
     <div class="item-box">
@@ -91,18 +91,8 @@
     </div>
     </a>
 	</c:forEach>
-</div> --%>
-<div class="item-container">
-<c:forEach var="item" items="${shohinList}">
-    <a href="ShohinDetailServlet?shohin_id=${item.shohinId}" class="item-link">
-        <div class="item-box">
-            <img src="images/${item.shouhinGazou}" alt="${item.shouhinMei}" width="150">
-			<p class="js_typing_item">${item.shouhinMei}</p>
-			<p class="js_typing_item">価格：${item.kakaku}円</p>
-        </div>
-    </a>
-</c:forEach>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -321,13 +311,10 @@
 }
 
 
-
-
 </style>
 
 <script>
 
-let textObserver;
 
 document.addEventListener("DOMContentLoaded", function () {
   // スライダー画像の切り替え
@@ -363,7 +350,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 商品一覧の文字はスクロールしてから1秒後にアニメーション
   const itemTextElements = document.querySelectorAll('.js_typing_item');
-  textObserver = new IntersectionObserver((entries, obs) => {
+  const textObserver = new IntersectionObserver((entries, obs) => {
 	  let textCount = 0;
 	  
     entries.forEach(entry => {
@@ -393,56 +380,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	      // 遅延時間を表示順にずらす（例：100msずつ）
 	      setTimeout(() => {
 	        entry.target.classList.add('visible');
-	      }, shownCount * 300);
+	      }, shownCount * 100);
 	
 	      shownCount++; // 次の要素の遅延時間を増やす
 	      obs.unobserve(entry.target);
 	    }
 	  });
 	}, {
-	  threshold: 0.4
+	  threshold: 0.2
 	});
   itemBoxes.forEach(el => boxObserver.observe(el));
 });
 
-let offset = 0; // 最初に表示した件数
-let isSearching = false;
 
-
-window.addEventListener('scroll', () => {
-	if (loading || isSearching) return;
-
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-    loading = true;
-
-    fetch(`ShohinScrollServlet?offset=${offset}&limit=10`)
-      .then(response => response.text())
-      .then(html => {
-        const container = document.querySelector('.item-container');
-        container.insertAdjacentHTML('beforeend', html);
-
-        // 新しく追加された要素にもアニメーションを適用
-        const newItems = container.querySelectorAll('.item-box:not(.visible)');
-        newItems.forEach((el, i) => {
-          setTimeout(() => {
-            el.classList.add('visible');
-          }, i * 300);
-        });
-
-        const newTextItems = container.querySelectorAll('.js_typing_item');
-        newTextItems.forEach(el => {
-          textObserver.observe(el);
-        });
-		
-        offset += 29;
-        loading = false;
-      })
-      .catch(err => {
-        console.error("読み込み失敗:", err);
-        loading = false;
-      });
-  }
-});
 </script>
 
 

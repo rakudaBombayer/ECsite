@@ -33,7 +33,6 @@ public class SearchServlet extends HttpServlet {
         request.setAttribute("shohinList", shohinList);
         request.setAttribute("cartNum", CartItem);
 		session.setAttribute("loginUser", account); 
-		request.setAttribute("isSearching", true); // 検索中フラグをセット
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/menu.jsp");
         rd.forward(request, response);
         
