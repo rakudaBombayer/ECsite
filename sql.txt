@@ -8,38 +8,54 @@ CREATE DATABASE shop_site;
 
 
 CREATE TABLE account (
-    kaiin_id SERIAL PRIMARY KEY,
-    password VARCHAR(255) NOT NULL,
-    shimei VARCHAR(100) NOT NULL,
-    yuubin_bangou VARCHAR(10) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    denwa_bangou VARCHAR(20) NOT NULL,
-    seinengappi DATE NOT NULL,
-    mail_address VARCHAR(255) NOT NULL,
-    shiharai_houhou VARCHAR(50) NOT NULL,
-    is_admin BOOLEAN DEFAULT FALSE
+  kaiin_id SERIAL PRIMARY KEY,
+  password VARCHAR(255) NOT NULL,
+  shimei VARCHAR(100) NOT NULL,
+  yuubin_bangou VARCHAR(10) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  denwa_bangou VARCHAR(20) NOT NULL,
+  seinengappi DATE NOT NULL,
+  mail_address VARCHAR(255) NOT NULL,
+  shiharai_houhou VARCHAR(50) NOT NULL,
+  is_admin BOOLEAN DEFAULT FALSE
 );
-
 
 CREATE TABLE order_customer (
-    order_id SERIAL PRIMARY KEY,
-    kaiin_id INT REFERENCES account(kaiin_id),
-    shimei VARCHAR(100) NOT NULL,
-    yuubin_bangou VARCHAR(10) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    denwa_bangou VARCHAR(20) NOT NULL,
-    mail_address VARCHAR(255) NOT NULL,
-    kounyubi TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    shiharai_houhou VARCHAR(50) NOT NULL
+  order_id SERIAL PRIMARY KEY,
+  kaiin_id INTEGER REFERENCES account(kaiin_id),
+  shimei VARCHAR(100) NOT NULL,
+  yuubin_bangou VARCHAR(10) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  denwa_bangou VARCHAR(20) NOT NULL,
+  mail_address VARCHAR(255) NOT NULL,
+  kounyubi TIMESTAMP DEFAULT NOW(),
+  shiharai_houhou VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE order_history (
+  history_id SERIAL PRIMARY KEY,
+  kaiin_id INTEGER NOT NULL REFERENCES account(kaiin_id),
+  shohin_id INTEGER NOT NULL REFERENCES shohin(shohin_id),
+  quantity INTEGER NOT NULL DEFAULT 1,
+  order_time TIMESTAMP DEFAULT NOW()
+);
 
 CREATE TABLE shohin (
-    shohin_id SERIAL PRIMARY KEY,
-    shouhin_mei VARCHAR(100) NOT NULL,
-    shouhin_setsumei TEXT NOT NULL,
-    kakaku INT NOT NULL,
-    kounyuu_suuryou INT NOT NULL,
-    zaiko_suuryou INT NOT NULL,
-    shouhin_gazou VARCHAR(255)
+  shohin_id SERIAL PRIMARY KEY,
+  shouhin_mei VARCHAR(100) NOT NULL UNIQUE,
+  shouhin_setsumei TEXT NOT NULL,
+  kakaku INTEGER NOT NULL,
+  zaiko_suuryou INTEGER NOT NULL,
+  shouhin_gazou VARCHAR(255),
+  category_name VARCHAR(50)
 );
+
+
+CREATE TABLE shopping_cart (
+  cart_id SERIAL PRIMARY KEY,
+  kaiin_id INTEGER NOT NULL REFERENCES account(kaiin_id),
+  shohin_id INTEGER NOT NULL REFERENCES shohin(shohin_id),
+  quantity INTEGER NOT NULL DEFAULT 1,
+  added_at TIMESTAMP DEFAULT NOW()
+);
+
