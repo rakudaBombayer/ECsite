@@ -1,0 +1,85 @@
+✅ order_customer テーブル構成（Excel貼り付け用）
+列名	型	修飾語
+order_id	integer	NOT NULL DEFAULT nextval('order_customer_order_id_seq'::regclass)
+kaiin_id	integer	
+shimei	character varying(100)	NOT NULL
+yuubin_bangou	character varying(10)	NOT NULL
+address	character varying(255)	NOT NULL
+denwa_bangou	character varying(20)	NOT NULL
+mail_address	character varying(255)	NOT NULL
+kounyubi	timestamp without time zone	DEFAULT now()
+shiharai_houhou	character varying(50)	NOT NULL
+✅ インデックス・外部キー制約
+種類	内容
+PRIMARY KEY	order_id
+FOREIGN KEY	kaiin_id → account(kaiin_id)
+
+
+
+order_history テーブル
+列名	型	修飾語
+history_id	integer	NOT NULL DEFAULT nextval('order_history_history_id_seq'::regclass)
+kaiin_id	integer	NOT NULL
+shohin_id	integer	NOT NULL
+quantity	integer	NOT NULL DEFAULT 1
+order_time	timestamp without time zone	DEFAULT now()
+種類	内容
+PRIMARY KEY	history_id
+FOREIGN KEY	kaiin_id → account(kaiin_id)
+FOREIGN KEY	shohin_id → shohin(shohin_id)
+
+
+✅ shohin テーブル
+列名	型	修飾語
+shohin_id	integer	NOT NULL DEFAULT nextval('shohin_shohin_id_seq'::regclass)
+shouhin_mei	character varying(100)	NOT NULL
+shouhin_setsumei	text	NOT NULL
+kakaku	integer	NOT NULL
+zaiko_suuryou	integer	NOT NULL
+shouhin_gazou	character varying(255)	
+category_name	character varying(50)	
+種類	内容
+PRIMARY KEY	shohin_id
+UNIQUE	shouhin_mei
+FOREIGN KEY 参照元	order_history(shohin_id), shopping_cart(shohin_id)
+
+
+
+✅ shopping_cart テーブル
+列名	型	修飾語
+cart_id	integer	NOT NULL DEFAULT nextval('shopping_cart_cart_id_seq'::regclass)
+kaiin_id	integer	NOT NULL
+shohin_id	integer	NOT NULL
+quantity	integer	NOT NULL DEFAULT 1
+added_at	timestamp without time zone	DEFAULT now()
+種類	内容
+PRIMARY KEY	cart_id
+FOREIGN KEY	kaiin_id → account(kaiin_id)
+FOREIGN KEY	shohin_id → shohin(shohin_id)
+
+
+
+
+
+
+
+
+✅ account
+                                       テーブル "public.account"
+       列        |           型           |                           修飾語
+-----------------+------------------------+------------------------------------------------------------
+ kaiin_id        | integer                | not null default nextval('account_kaiin_id_seq'::regclass)
+ password        | character varying(255) | not null
+ shimei          | character varying(100) | not null
+ yuubin_bangou   | character varying(10)  | not null
+ address         | character varying(255) | not null
+ denwa_bangou    | character varying(20)  | not null
+ seinengappi     | date                   | not null
+ mail_address    | character varying(255) | not null
+ shiharai_houhou | character varying(50)  | not null
+ is_admin        | boolean                | default false
+インデックス:
+    "account_pkey" PRIMARY KEY, btree (kaiin_id)
+参照元：
+    TABLE "order_customer" CONSTRAINT "order_customer_kaiin_id_fkey" FOREIGN KEY (kaiin_id) REFERENCES account(kaiin_id)    TABLE "order_history" CONSTRAINT "order_history_kaiin_id_fkey" FOREIGN KEY (kaiin_id) REFERENCES account(kaiin_id)
+    TABLE "shopping_cart" CONSTRAINT "shopping_cart_kaiin_id_fkey" FOREIGN KEY (kaiin_id) REFERENCES account(kaiin_id)
